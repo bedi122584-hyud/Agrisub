@@ -1,0 +1,169 @@
+/* app.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap');
+
+:root {
+  --vert-fonce: #005704;
+  --vert-clair: #006b05;
+  --beige: #F5F5DC;
+  --brun: #7e3e10;
+}
+
+/* Réinitialisation des styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--beige);
+  color: var(--brun);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--vert-fonce);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+/* Styles de base pour les composants admin */
+.button-primary {
+  background-color: var(--vert-fonce);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.button-primary:hover {
+  background-color: #1B5E20;
+  transform: translateY(-2px);
+}
+
+.badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Styles responsives pour les tableaux */
+@media (max-width: 768px) {
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+    border-radius: 8px;
+  }
+
+  table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    text-align: right;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 600;
+    color: var(--vert-fonce);
+    margin-right: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Styles spécifiques pour la sidebar */
+.admin-sidebar {
+  background-color: var(--vert-fonce);
+  color: white;
+  min-height: 100vh;
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+
+/* Adaptation des logos */
+.logo {
+  height: 4em;
+  padding: 1em;
+  transition: filter 0.3s ease;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 1em rgba(46, 125, 50, 0.4));
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    z-index: 1000;
+  }
+
+  .admin-sidebar.active {
+    transform: translateX(0);
+  }
+
+  .logo {
+    height: 3.5em;
+    padding: 0.5em;
+  }
+}
+
+/* Styles pour les états de chargement */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  color: var(--vert-fonce);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Améliorations spécifiques aux formulaires */
+input, textarea, select {
+  border: 2px solid var(--vert-clair);
+  border-radius: 6px;
+  padding: 0.8rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--vert-fonce);
+  outline: none;
+}

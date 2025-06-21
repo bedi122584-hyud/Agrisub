@@ -1,0 +1,136 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 80 59% 98%;
+    --foreground: 120 10% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 120 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 10% 10%;
+
+    --primary: 122 48% 34%;
+    --primary-foreground: 355 100% 100%;
+
+    --secondary: 120 38% 64%;
+    --secondary-foreground: 120 10% 10%;
+
+    --muted: 60 33% 92%;
+    --muted-foreground: 120 5% 45%;
+
+    --accent: 33 60% 31%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 120 15% 85%;
+    --input: 120 15% 85%;
+    --ring: 122 48% 34%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 122 48% 25%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 122 48% 15%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 122 38% 30%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 122 28% 30%;
+    --sidebar-ring: 122 48% 34%;
+  }
+
+  .dark {
+    --background: 120 15% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 120 15% 15%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 120 15% 15%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 122 48% 34%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 120 38% 40%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 120 15% 25%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 33 60% 31%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 120 15% 25%;
+    --input: 120 15% 25%;
+    --ring: 120 38% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+}
+
+@layer components {
+  .agro-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .agro-card {
+    @apply bg-white rounded-lg shadow-md p-6 border border-agro-light hover:shadow-lg transition-shadow duration-300;
+  }
+  
+  .agro-button {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  }
+
+  .agro-button-primary {
+    @apply bg-agro-primary text-white hover:bg-agro-dark;
+  }
+
+  .agro-button-secondary {
+    @apply bg-agro-secondary text-agro-dark hover:bg-agro-light;
+  }
+  
+  .agro-input {
+    @apply border border-agro-light rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-agro-primary;
+  }
+
+  .agro-section {
+    @apply py-12 md:py-20;
+  }
+}
