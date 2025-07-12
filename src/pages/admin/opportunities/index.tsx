@@ -1,4 +1,3 @@
-// src/pages/admin/opportunities/index.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
@@ -16,9 +15,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Helmet } from 'react-helmet-async';
-import { Loader2, Menu, Plus } from 'lucide-react';
+import { Loader2, Menu, Plus, Sparkles, Bot, FileText, Lightbulb } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
-import OpportunityCard from '@/components/OpportunityCard';
 
 type Opportunity = Database['public']['Tables']['opportunities']['Row'];
 
@@ -81,7 +79,7 @@ const AdminOpportunities: React.FC = () => {
       }
     });
 
-    // Abonnement aux changements d’état d’auth
+    // Abonnement aux changements d'état d'auth
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -105,11 +103,11 @@ const AdminOpportunities: React.FC = () => {
   const getStatusBadge = (status: Opportunity['status']) => {
     switch (status) {
       case 'publié':
-        return <Badge className="bg-[#2E7D32]">Publié</Badge>;
+        return <Badge className="bg-gradient-to-r from-[#2E7D32] to-[#388e3c]">Publié</Badge>;
       case 'archivé':
-        return <Badge className="bg-[#8B4513]">Archivé</Badge>;
+        return <Badge className="bg-gradient-to-r from-[#8B4513] to-[#a0522d]">Archivé</Badge>;
       default:
-        return <Badge className="bg-[#81C784] text-gray-800">Brouillon</Badge>;
+        return <Badge className="bg-gradient-to-r from-[#81C784] to-[#a5d6a7] text-gray-800">Brouillon</Badge>;
     }
   };
 
@@ -130,7 +128,7 @@ const AdminOpportunities: React.FC = () => {
         method: 'POST',
         body: formData,
       });
-      if (!res.ok) throw new Error('Erreur lors de l’import IA');
+      if (!res.ok) throw new Error("Erreur lors de l'import IA");
 
       setUploadSuccess(true);
       setFile(null);
@@ -148,16 +146,24 @@ const AdminOpportunities: React.FC = () => {
     }
   };
 
+  // Suggestions IA pour les opportunités
+  const aiSuggestions = [
+    "L'IA suggère de créer une opportunité pour les projets d'agriculture urbaine",
+    "Détection de 3 nouvelles subventions dans le domaine des énergies renouvelables",
+    "Optimisation suggérée pour les critères d'éligibilité de la catégorie 'Innovation'"
+  ];
+
   return (
     <>
       <Helmet>
-        <title>Gestion des Opportunités | AgroSub</title>
+        <title>Gestion Intelligente des Opportunités | SubIvoir</title>
+        <meta name="description" content="Plateforme de gestion des opportunités agricoles avec IA" />
       </Helmet>
 
-      <div className="flex min-h-screen bg-[#F5F5DC]">
+      <div className="flex min-h-screen bg-gradient-to-b from-[#f1f8e9] to-[#e8f5e9]">
         <AdminSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="flex-1 p-4 md:p-8 transition-all duration-300">
+        <div className="flex-1 p-4 md:p-8 transition-all duration-300 overflow-auto">
           {/* Mobile Header */}
           <div className="md:hidden mb-6 flex items-center justify-between">
             <Button
@@ -168,79 +174,138 @@ const AdminOpportunities: React.FC = () => {
             >
               <Menu size={24} />
             </Button>
-            <img src="/agrosub-logo.svg" alt="Logo AgroSub" className="h-8 w-8" />
+            <div className="flex items-center">
+              <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-1 rounded-lg mr-1">
+                <div className="bg-white p-0.5 rounded-md">
+                  <div className="w-6 h-6 flex items-center justify-center rounded bg-gradient-to-r from-[#2e7d32] to-[#388e3c]">
+                    <span className="text-white font-bold text-xs">SV</span>
+                  </div>
+                </div>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
+                SubIvoir
+              </span>
+            </div>
           </div>
 
           {/* Title & Actions */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 md:mb-8">
-            <div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-montserrat text-[#2E7D32]">
-                Gestion des Opportunités
+          <div className="mb-8">
+            <div className="flex items-center mb-3">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#2E7D32] mr-3">
+                Gestion Intelligente des Opportunités
               </h1>
-              <p className="text-xs sm:text-sm md:text-base font-poppins text-[#8B4513] mt-1">
-                Créez et gérez les différentes opportunités agricoles
-              </p>
+              <span className="flex items-center text-xs bg-[#388e3c] text-white px-2 py-1 rounded-full">
+                <Sparkles size={12} className="mr-1" /> IA
+              </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:flex gap-2 mt-4 md:mt-0">
-              {[
-                ['subvention/nouvelle', 'Subvention', '#2E7D32'],
-                ['concours/nouveau', 'Concours', '#8B4513'],
-                ['projet/nouveau', 'Projet', '#2E7D32'],
-                ['formation/nouvelle', 'Formation', '#8B4513']
-              ].map(([to, label, color], i) => (
-                <Button
-                  key={i}
-                  asChild
-                  className={`bg-[${color}] hover:bg-opacity-90 h-10 text-sm font-poppins`}
-                >
-                  <Link to={to} className="flex items-center gap-2">
-                    <Plus size={16} />
-                    <span>{label}</span>
-                  </Link>
-                </Button>
+            <p className="text-sm text-[#8B4513]">
+              Créez et gérez les opportunités agricoles avec l'aide de l'intelligence artificielle
+            </p>
+          </div>
+
+          {/* Suggestions IA */}
+          <div className="mb-8 bg-gradient-to-r from-[#e8f5e9] to-[#c8e6c9] p-4 rounded-xl border border-[#a5d6a7]">
+            <div className="flex items-center mb-3">
+              <Bot className="h-5 w-5 text-[#2E7D32] mr-2" />
+              <h3 className="font-bold text-[#2E7D32]">Suggestions de l'IA</h3>
+            </div>
+            <ul className="space-y-2">
+              {aiSuggestions.map((suggestion, i) => (
+                <li key={i} className="flex items-start">
+                  <Lightbulb className="h-4 w-4 text-[#8B4513] mt-0.5 mr-2 flex-shrink-0" />
+                  <span className="text-sm text-[#1b5e20]">{suggestion}</span>
+                </li>
               ))}
-            </div>
+            </ul>
+          </div>
+
+          {/* Boutons de création */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            {[
+              ['subvention/nouvelle', 'Subvention', 'from-[#2E7D32] to-[#388e3c]'],
+              ['concours/nouveau', 'Concours', 'from-[#8B4513] to-[#a0522d]'],
+              ['projet/nouveau', 'Projet', 'from-[#2E7D32] to-[#4caf50]'],
+              ['formation/nouvelle', 'Formation', 'from-[#8B4513] to-[#d2691e]']
+            ].map(([to, label, gradient], i) => (
+              <Button
+                key={i}
+                asChild
+                className={`bg-gradient-to-r ${gradient} text-white hover:opacity-90 h-12 font-medium shadow-md`}
+              >
+                <Link to={to} className="flex flex-col items-center justify-center gap-1">
+                  <Plus size={20} />
+                  <span>{label}</span>
+                </Link>
+              </Button>
+            ))}
           </div>
 
           {/* Content */}
           {loading ? (
             <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-[#2E7D32]" />
+              <Loader2 className="h-10 w-10 animate-spin text-[#2E7D32]" />
+              <span className="ml-3 text-[#2E7D32]">Chargement des opportunités IA...</span>
             </div>
           ) : error ? (
-            <div className="text-red-600 font-poppins text-center py-12">{error}</div>
+            <div className="text-center py-12">
+              <div className="bg-red-100 text-red-700 p-4 rounded-lg inline-block">
+                {error}
+              </div>
+            </div>
           ) : opportunities.length === 0 ? (
-            <div className="text-center py-12 text-[#8B4513] font-poppins">
-              Aucune opportunité trouvée
+            <div className="text-center py-12">
+              <div className="bg-[#e8f5e9] p-6 rounded-xl inline-block max-w-md">
+                <FileText className="h-12 w-12 text-[#8B4513] mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-[#2E7D32] mb-2">Aucune opportunité trouvée</h3>
+                <p className="text-[#8B4513] mb-4">
+                  Commencez par créer votre première opportunité ou importez un PDF
+                </p>
+                <Button className="bg-gradient-to-r from-[#2E7D32] to-[#388e3c] text-white">
+                  Créer une opportunité
+                </Button>
+              </div>
             </div>
           ) : (
-            <>
-              {/* Mobile cards */}
-              <div className="md:hidden space-y-4">
-                {opportunities.map((opp) => (
-                  <OpportunityCard key={opp.id} opportunity={opp} />
-                ))}
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-[#c8e6c9]">
+              <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-4">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-bold text-white">
+                    Opportunités ({opportunities.length})
+                  </h2>
+                  <div className="flex items-center text-white/80">
+                    <Sparkles size={16} className="mr-1" />
+                    <span className="text-sm">Powered by AI</span>
+                  </div>
+                </div>
               </div>
-
-              {/* Desktop table */}
-              <div className="hidden md:block rounded-lg border border-[#8B4513]/20 overflow-hidden shadow-lg">
-                <Table className="w-full font-poppins">
-                  <TableHeader className="bg-[#81C784]/30">
+              
+              <div className="p-0">
+                <Table className="w-full">
+                  <TableHeader className="bg-[#e8f5e9]">
                     <TableRow>
-                      <TableHead className="text-[#2E7D32] font-semibold">Titre</TableHead>
-                      <TableHead className="text-[#2E7D32] font-semibold">Type</TableHead>
-                      <TableHead className="text-[#2E7D32] font-semibold">Organisation</TableHead>
-                      <TableHead className="text-[#2E7D32] font-semibold">Statut</TableHead>
-                      <TableHead className="text-[#2E7D32] font-semibold">Créé le</TableHead>
-                      <TableHead className="text-[#2E7D32] font-semibold text-right">
+                      <TableHead className="text-[#2E7D32] font-bold">Titre</TableHead>
+                      <TableHead className="text-[#2E7D32] font-bold">Type</TableHead>
+                      <TableHead className="text-[#2E7D32] font-bold">Organisation</TableHead>
+                      <TableHead className="text-[#2E7D32] font-bold">Statut</TableHead>
+                      <TableHead className="text-[#2E7D32] font-bold">Créé le</TableHead>
+                      <TableHead className="text-[#2E7D32] font-bold text-right">
                         Actions
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {opportunities.map((opp) => (
-                      <TableRow key={opp.id} className="hover:bg-[#F5F5DC]/50 transition-colors">
-                        <TableCell className="font-medium text-[#2E7D32]">{opp.title}</TableCell>
+                      <TableRow key={opp.id} className="hover:bg-[#f1f8e9]/50 transition-colors border-b border-[#e8f5e9]">
+                        <TableCell className="font-medium text-[#2E7D32]">
+                          <div className="flex items-center">
+                            {opp.title}
+                            {opp.ai_generated && (
+                              <span className="ml-2 flex items-center text-xs bg-[#388e3c]/10 text-[#2E7D32] px-2 py-0.5 rounded-full">
+                                <Sparkles size={12} className="mr-1" /> IA
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
                         <TableCell className="capitalize text-[#8B4513]">{opp.type}</TableCell>
                         <TableCell className="text-[#8B4513]">{opp.organization}</TableCell>
                         <TableCell>{getStatusBadge(opp.status)}</TableCell>
@@ -266,40 +331,93 @@ const AdminOpportunities: React.FC = () => {
                           >
                             <Link to={`/opportunites/${opp.id}`}>Voir</Link>
                           </Button>
-                          <Button variant="destructive" size="sm" className="bg-red-600 hover:bg-red-700">
-                            Supprimer
-                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
-            </>
+            </div>
           )}
 
-          {/* === Section IA PDF === */}
-          <div className="mt-12 border-t border-[#8B4513]/20 pt-6">
-            <h2 className="text-xl font-bold text-[#2E7D32] mb-4">
-              Gestion des Opportunités IA (PDF)
-            </h2>
-            <form onSubmit={handlePdfUpload}>
-              <input
-                type="file"
-                accept="application/pdf"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="mb-4"
-              />
-              <Button
-                type="submit"
-                className="bg-[#2E7D32] text-white"
-                disabled={!file || uploading}
-              >
-                {uploading ? 'Importation en cours...' : 'Importer une opportunité en PDF'}
-              </Button>
+          {/* Section IA PDF */}
+          <div className="mt-12 bg-gradient-to-br from-white to-[#f1f8e9] rounded-2xl p-6 shadow-lg border border-[#c8e6c9]">
+            <div className="flex items-center mb-6">
+              <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-2 rounded-full mr-3">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-[#2E7D32]">
+                  Assistant IA - Import de Documents
+                </h2>
+                <p className="text-sm text-[#8B4513]">
+                  Importez un PDF et notre IA extraira automatiquement les informations
+                </p>
+              </div>
+            </div>
+            
+            <form onSubmit={handlePdfUpload} className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <label className="block mb-2 text-sm font-medium text-[#2E7D32]">
+                    Sélectionnez un fichier PDF
+                  </label>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    className="block w-full text-sm text-[#8B4513] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#e8f5e9] file:text-[#2E7D32] hover:file:bg-[#c8e6c9]"
+                  />
+                </div>
+                
+                <div className="flex items-end">
+                  <Button
+                    type="submit"
+                    className="bg-gradient-to-r from-[#2E7D32] to-[#388e3c] text-white h-10 min-w-[200px]"
+                    disabled={!file || uploading}
+                  >
+                    {uploading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        Analyse en cours...
+                      </>
+                    ) : (
+                      <>
+                        <Bot className="h-4 w-4 mr-2" />
+                        Analyser avec IA
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+              
+              {uploadError && (
+                <div className="text-red-600 p-3 bg-red-50 rounded-lg">
+                  {uploadError}
+                </div>
+              )}
+              
+              {uploadSuccess && (
+                <div className="text-green-700 p-3 bg-green-50 rounded-lg flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Opportunité créée avec succès grâce à l'analyse IA !
+                </div>
+              )}
             </form>
-            {uploadError && <p className="text-red-600 mt-2">{uploadError}</p>}
-            {uploadSuccess && <p className="text-green-700 mt-2">✅ Opportunité ajoutée !</p>}
+            
+            <div className="mt-6 p-4 bg-[#e8f5e9] rounded-lg border border-[#c8e6c9]">
+              <h3 className="font-bold text-[#2E7D32] mb-2 flex items-center">
+                <Lightbulb className="h-4 w-4 mr-2 text-[#8B4513]" />
+                Comment ça marche ?
+              </h3>
+              <p className="text-sm text-[#1b5e20]">
+                Notre intelligence artificielle analyse le document PDF, extrait automatiquement 
+                les informations clés (titre, organisation, dates, montants) et crée une nouvelle 
+                opportunité dans votre tableau de bord et publie automatiquement.
+              </p>
+            </div>
           </div>
         </div>
       </div>

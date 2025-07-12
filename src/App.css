@@ -1,6 +1,8 @@
 /* app.css */
+/* Import des polices */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap');
 
+/* Variables CSS */
 :root {
   --vert-fonce: #005704;
   --vert-clair: #006b05;
@@ -8,22 +10,18 @@
   --brun: #7e3e10;
 }
 
-/* Réinitialisation des styles */
+/* Réinitialisation globale */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Base */
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--beige);
-  color: var(--brun);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', sans-serif;
-  color: var(--vert-fonce);
+  color: var(--brun); /* texte par défaut - tu peux l’enlever si tu veux passer 100% tailwind */
 }
 
 #root {
@@ -34,7 +32,13 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 
-/* Styles de base pour les composants admin */
+/* Retirer le forçage de couleur pour laisser Tailwind gérer */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  /* PAS DE COLOR ici : Tailwind va gérer */
+}
+
+/* Boutons personnalisés */
 .button-primary {
   background-color: var(--vert-fonce);
   color: white;
@@ -42,12 +46,12 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
 .button-primary:hover {
   background-color: #1B5E20;
   transform: translateY(-2px);
 }
 
+/* Badges */
 .badge {
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
@@ -55,7 +59,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
 }
 
-/* Styles responsives pour les tableaux */
+/* Table responsive */
 @media (max-width: 768px) {
   .table-responsive {
     width: 100%;
@@ -97,12 +101,11 @@ h1, h2, h3, h4, h5, h6 {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .fade-in {
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Styles spécifiques pour la sidebar */
+/* Sidebar */
 .admin-sidebar {
   background-color: var(--vert-fonce);
   color: white;
@@ -111,18 +114,17 @@ h1, h2, h3, h4, h5, h6 {
   transition: transform 0.3s ease;
 }
 
-/* Adaptation des logos */
+/* Logo */
 .logo {
   height: 4em;
   padding: 1em;
   transition: filter 0.3s ease;
 }
-
 .logo:hover {
   filter: drop-shadow(0 0 1em rgba(46, 125, 50, 0.4));
 }
 
-/* Version mobile */
+/* Mobile */
 @media (max-width: 768px) {
   #root {
     padding: 1rem;
@@ -144,25 +146,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Styles pour les états de chargement */
+/* Spinner */
 .loading-spinner {
   animation: spin 1s linear infinite;
   color: var(--vert-fonce);
 }
-
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* Améliorations spécifiques aux formulaires */
+/* Formulaires */
 input, textarea, select {
   border: 2px solid var(--vert-clair);
   border-radius: 6px;
   padding: 0.8rem;
   transition: border-color 0.3s ease;
 }
-
 input:focus, textarea:focus, select:focus {
   border-color: var(--vert-fonce);
   outline: none;

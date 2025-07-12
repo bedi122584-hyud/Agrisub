@@ -10,12 +10,17 @@ import {
   Activity,
   TrendingUp,
   Users,
-  Files,
+  FileText,
   AlertTriangle,
-  Clock,
   ChevronRight,
-  ShieldCheck,
-  Menu
+  Menu,
+  Shield,
+  BarChart2,
+  Settings,
+  LogOut,
+  Sparkles,
+  Lightbulb,
+  Bot
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import type { Database } from '@/integrations/supabase/types';
@@ -45,7 +50,7 @@ const AdminDashboard = () => {
     loadOpportunities();
   }, []);
 
-  // Données statistiques
+  // Données statistiques avec indicateurs IA
   const stats = [
     {
       title: "Utilisateurs actifs",
@@ -53,27 +58,31 @@ const AdminDashboard = () => {
       change: "+12%",
       changeType: "increase",
       icon: <Users className="h-5 w-5 md:h-6 md:w-6 text-[#2E7D32]" />,
+      aiTip: "L'IA prédit +18% de croissance ce mois-ci"
     },
     {
-      title: "Opportunités publiées",
+      title: "Opportunités IA",
       value: "243",
       change: "+8%",
       changeType: "increase",
-      icon: <Files className="h-5 w-5 md:h-6 md:w-6 text-[#8B4513]" />,
+      icon: <Sparkles className="h-5 w-5 md:h-6 md:w-6 text-[#8B4513]" />,
+      aiTip: "32 opportunités détectées automatiquement"
     },
     {
-      title: "Projets soumis",
+      title: "Projets IA",
       value: "426",
       change: "+22%",
       changeType: "increase",
-      icon: <Activity className="h-5 w-5 md:h-6 md:w-6 text-[#2E7D32]" />,
+      icon: <Bot className="h-5 w-5 md:h-6 md:w-6 text-[#2E7D32]" />,
+      aiTip: "24 projets générés avec l'assistant IA"
     },
     {
-      title: "Taux de conversion",
+      title: "Taux de succès IA",
       value: "24%",
-      change: "-3%",
-      changeType: "decrease",
-      icon: <TrendingUp className="h-5 w-5 md:h-6 md:w-6 text-[#8B4513]" />,
+      change: "+3%",
+      changeType: "increase",
+      icon: <Lightbulb className="h-5 w-5 md:h-6 md:w-6 text-[#8B4513]" />,
+      aiTip: "L'IA a amélioré les résultats de 12%"
     },
   ];
 
@@ -83,12 +92,12 @@ const AdminDashboard = () => {
       id: 1,
       title: "Opportunités à modérer",
       count: 3,
-      icon: <Files className="h-5 w-5 text-[#8B4513]" />,
+      icon: <FileText className="h-5 w-5 text-[#8B4513]" />,
       link: "/admin/moderation",
     },
     {
       id: 2,
-      title: "Signalements à traiter",
+      title: "Signalements IA",
       count: 2,
       icon: <AlertTriangle className="h-5 w-5 text-red-600" />,
       link: "/admin/moderation",
@@ -97,14 +106,14 @@ const AdminDashboard = () => {
 
   // Composant mobile pour chaque opportunité récente
   const RecentOppCard = ({ item }: { item: OpportunityType }) => (
-    <Card className="mb-4">
+    <Card className="mb-4 border-[#8B4513]/20">
       <CardContent className="p-4">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-base font-semibold font-montserrat text-[#2E7D32]">
+            <h3 className="text-base font-semibold text-[#2E7D32]">
               {item.title}
             </h3>
-            <p className="text-xs font-poppins text-[#8B4513] mt-1">{item.organization}</p>
+            <p className="text-xs text-[#8B4513] mt-1">{item.organization}</p>
           </div>
           <Button
             variant="ghost"
@@ -123,9 +132,14 @@ const AdminDashboard = () => {
           }`}>
             {item.status}
           </span>
-          <span className="text-xs font-poppins text-[#8B4513]">
+          <span className="text-xs text-[#8B4513]">
             {item.deadline && format(new Date(item.deadline), 'dd/MM/yyyy', { locale: fr })}
           </span>
+          {item.ai_generated && (
+            <span className="flex items-center text-xs bg-[#388e3c]/10 text-[#2E7D32] px-2 py-1 rounded-full">
+              <Sparkles size={12} className="mr-1" /> IA
+            </span>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -134,12 +148,8 @@ const AdminDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Tableau de bord administrateur | AgroSub</title>
-        <meta name="description" content="Gestion administrative de la plateforme AgroSub" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
+        <title>Tableau de bord IA | SubIvoir</title>
+        <meta name="description" content="Gestion administrative intelligente de la plateforme SubIvoir" />
       </Helmet>
 
       <div className="flex min-h-screen bg-[#F5F5DC]">
@@ -156,38 +166,62 @@ const AdminDashboard = () => {
             >
               <Menu size={24} />
             </Button>
-            <img src="/agrosub-logo.svg" alt="Logo AgroSub" className="h-8 w-8" />
+            <div className="flex items-center">
+              <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-1 rounded-lg mr-1">
+                <div className="bg-white p-0.5 rounded-md">
+                  <div className="w-6 h-6 flex items-center justify-center rounded bg-gradient-to-r from-[#2e7d32] to-[#388e3c]">
+                    <span className="text-white font-bold text-xs">SV</span>
+                  </div>
+                </div>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
+                SubIvoir
+              </span>
+            </div>
           </div>
 
-          {/* Titre principal */}
+          {/* Titre principal avec IA */}
           <div className="mb-6 md:mb-8">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-montserrat text-[#2E7D32]">
-              Tableau de bord administrateur
-            </h1>
-            <p className="text-xs sm:text-sm md:text-base font-poppins text-[#8B4513]">
-              Vue d'ensemble des activités et performances de la plateforme
+            <div className="flex items-center mb-2">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2E7D32] mr-3">
+                Tableau de bord IA
+              </h1>
+              <span className="flex items-center text-xs bg-[#388e3c] text-white px-2 py-1 rounded-full">
+                <Sparkles size={12} className="mr-1" /> Intelligence Artificielle
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm md:text-base text-[#8B4513]">
+              Analyse intelligente et gestion automatisée des financements
             </p>
           </div>
 
-          {/* Statistiques */}
+          {/* Statistiques avec IA */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:mb-8">
             {stats.map((stat, i) => (
-              <Card key={i} className="hover:shadow-lg transition-shadow border-[#8B4513]/20">
-                <CardContent className="p-4 md:p-6">
+              <Card key={i} className="hover:shadow-lg transition-shadow border-[#8B4513]/20 bg-gradient-to-br from-white to-[#f1f8e9]">
+                <CardContent className="p-4 md:p-6 relative">
                   <div className="flex justify-between items-center">
                     <div className="bg-[#81C784]/30 p-2 rounded-lg">{stat.icon}</div>
-                    <span className={`text-sm font-poppins ${
+                    <span className={`text-sm ${
                       stat.changeType === "increase" ? "text-[#2E7D32]" : "text-red-600"
                     }`}>
                       {stat.change}
                     </span>
                   </div>
                   <div className="mt-3 md:mt-4">
-                    <h3 className="text-2xl md:text-3xl font-bold font-montserrat text-[#2E7D32]">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#2E7D32]">
                       {stat.value}
                     </h3>
-                    <p className="text-xs md:text-sm font-poppins text-[#8B4513] mt-1">
+                    <p className="text-xs md:text-sm text-[#8B4513] mt-1">
                       {stat.title}
+                    </p>
+                  </div>
+                  
+                  {/* Conseil IA */}
+                  <div className="mt-3 p-2 bg-[#e8f5e9] rounded-lg border border-[#c8e6c9]">
+                    <p className="text-xs text-[#1b5e20] flex items-start">
+                      <Lightbulb size={14} className="mr-1 mt-0.5 flex-shrink-0 text-[#8B4513]" />
+                      <span>{stat.aiTip}</span>
                     </p>
                   </div>
                 </CardContent>
@@ -199,17 +233,17 @@ const AdminDashboard = () => {
           <div className="space-y-8 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-6">
             {/* Section opportunités récentes */}
             <div className="lg:col-span-2 space-y-4">
-              <Card className="border-[#8B4513]/20 overflow-hidden">
-                <CardHeader className="pb-2 md:pb-3 bg-[#81C784]/30">
+              <Card className="border-[#8B4513]/20 overflow-hidden bg-gradient-to-br from-white to-[#f1f8e9]">
+                <CardHeader className="pb-2 md:pb-3 bg-gradient-to-r from-[#2e7d32] to-[#388e3c]">
                   <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg font-montserrat text-[#2E7D32]">
-                      Opportunités récentes
+                    <CardTitle className="text-lg text-white">
+                      Opportunités IA récentes
                     </CardTitle>
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       onClick={() => navigate('/admin/opportunites')}
-                      className="text-[#2E7D32] hover:bg-[#81C784]/20 font-poppins"
+                      className="text-white hover:bg-white/10"
                     >
                       Tout voir <ChevronRight size={16} />
                     </Button>
@@ -229,8 +263,8 @@ const AdminDashboard = () => {
                       
                       {/* Tableau desktop */}
                       <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full text-sm font-poppins">
-                          <thead className="bg-[#81C784]/10">
+                        <table className="w-full text-sm">
+                          <thead className="bg-[#e8f5e9]">
                             <tr className="border-b border-[#8B4513]/20">
                               <th className="p-3 text-left text-[#2E7D32]">Titre</th>
                               <th className="p-3 text-left text-[#2E7D32]">Organisation</th>
@@ -242,7 +276,16 @@ const AdminDashboard = () => {
                           <tbody>
                             {opportunities.map((item) => (
                               <tr key={item.id} className="group hover:bg-[#F5F5DC]/50">
-                                <td className="p-3 text-[#8B4513]">{item.title}</td>
+                                <td className="p-3 text-[#8B4513]">
+                                  <div className="flex items-center">
+                                    {item.title}
+                                    {item.ai_generated && (
+                                      <span className="ml-2 flex items-center text-xs bg-[#388e3c]/10 text-[#2E7D32] px-2 py-0.5 rounded-full">
+                                        <Sparkles size={12} className="mr-1" /> IA
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
                                 <td className="p-3 text-[#8B4513]">{item.organization}</td>
                                 <td className="p-3">
                                   <span className={`px-2 py-1 rounded-full text-xs ${
@@ -277,15 +320,15 @@ const AdminDashboard = () => {
               </Card>
             </div>
 
-            {/* Section tâches & activité */}
+            {/* Section IA & activité */}
             <div className="space-y-6">
               {/* Tâches en attente */}
-              <Card className="border-[#8B4513]/20">
-                <CardHeader className="bg-[#81C784]/30 p-4">
-                  <CardTitle className="text-lg font-montserrat text-[#2E7D32]">
-                    En attente d'action
+              <Card className="border-[#8B4513]/20 bg-gradient-to-br from-white to-[#f1f8e9]">
+                <CardHeader className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-4">
+                  <CardTitle className="text-lg text-white">
+                    Actions IA prioritaires
                   </CardTitle>
-                  <CardDescription className="font-poppins text-[#8B4513] mt-1">
+                  <CardDescription className="text-white/80 mt-1">
                     Tâches nécessitant votre attention
                   </CardDescription>
                 </CardHeader>
@@ -298,15 +341,58 @@ const AdminDashboard = () => {
                     >
                       <div className="flex items-center gap-3">
                         {task.icon}
-                        <span className="text-sm font-poppins text-[#8B4513]">
+                        <span className="text-sm text-[#8B4513]">
                           {task.title}
                         </span>
                       </div>
-                      <span className="bg-[#81C784]/30 rounded-full px-2 py-0.5 text-sm font-poppins text-[#2E7D32]">
+                      <span className="bg-[#81C784]/30 rounded-full px-2 py-0.5 text-sm text-[#2E7D32]">
                         {task.count}
                       </span>
                     </div>
                   ))}
+                </CardContent>
+              </Card>
+
+              {/* Recommandations IA */}
+              <Card className="border-[#8B4513]/20 bg-gradient-to-br from-white to-[#f1f8e9]">
+                <CardHeader className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-4">
+                  <CardTitle className="text-lg text-white">
+                    Recommandations IA
+                  </CardTitle>
+                  <CardDescription className="text-white/80 mt-1">
+                    Suggestions intelligentes pour optimiser la plateforme
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-4 space-y-4">
+                  <div className="flex items-start">
+                    <Sparkles className="h-5 w-5 text-[#8B4513] mt-0.5 flex-shrink-0" />
+                    <div className="ml-3">
+                      <h4 className="text-sm font-medium text-[#2E7D32]">Catégorisation automatique</h4>
+                      <p className="text-xs text-[#8B4513] mt-1">
+                        L'IA suggère de créer une nouvelle catégorie "Énergie Verte" pour 12 opportunités
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <Sparkles className="h-5 w-5 text-[#8B4513] mt-0.5 flex-shrink-0" />
+                    <div className="ml-3">
+                      <h4 className="text-sm font-medium text-[#2E7D32]">Optimisation des délais</h4>
+                      <p className="text-xs text-[#8B4513] mt-1">
+                        3 opportunités pourraient bénéficier d'une extension de 15 jours (+24% de participation estimée)
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <Sparkles className="h-5 w-5 text-[#8B4513] mt-0.5 flex-shrink-0" />
+                    <div className="ml-3">
+                      <h4 className="text-sm font-medium text-[#2E7D32]">Notification ciblée</h4>
+                      <p className="text-xs text-[#8B4513] mt-1">
+                        Envoyer une alerte à 42 utilisateurs éligibles pour l'appel à projets "Innovation Agricole"
+                      </p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>

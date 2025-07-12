@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Calendar as CalendarIcon, Upload, Menu, X, Plus } from 'lucide-react';
+import { Calendar as CalendarIcon, Upload, Menu, X, Plus, Sparkles, Bot, Lightbulb, Loader2 } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -44,6 +44,7 @@ const EditOpportunity: React.FC = () => {
   const [newPrize, setNewPrize] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [existingCover, setExistingCover] = useState<string | null>(null);
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
 
   const documentOptions = () => {
     switch (type) {
@@ -86,10 +87,23 @@ const EditOpportunity: React.FC = () => {
         if (type === 'concours' && Array.isArray(sd.prix)) setPrizes(sd.prix);
       }
       
+      // Générer des suggestions IA
+      generateAiSuggestions(data);
+      
       setLoading(false);
     }
     load();
   }, [id, setValue, type]);
+
+  // Simuler des suggestions IA basées sur les données
+  const generateAiSuggestions = (data: OpportunityType) => {
+    const suggestions = [
+      "L'IA suggère d'ajouter une formation sur les techniques agricoles modernes",
+      "Optimisation des critères d'éligibilité pour augmenter le taux de participation",
+      "Ajouter un partenaire financier pour augmenter le montant de la subvention"
+    ];
+    setAiSuggestions(suggestions);
+  };
 
   const handleDocumentSelect = (value: string) => {
     setSelectedDocs(prev => {
@@ -152,339 +166,437 @@ const EditOpportunity: React.FC = () => {
     setLoading(false);
   };
 
-  if (loading) return <div className="p-8">Chargement...</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#f1f8e9] to-[#e8f5e9]">
+      <div className="text-center">
+        <Loader2 className="h-12 w-12 animate-spin text-[#2E7D32] mx-auto mb-4" />
+        <p className="text-xl font-bold text-[#2E7D32]">Chargement des données IA...</p>
+      </div>
+    </div>
+  );
 
   return (
     <>
       <Helmet>
-        <title>Modifier {type} | AgroSub</title>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+        <title>Édition Intelligente | SubIvoir</title>
+        <meta name="description" content="Éditez les opportunités avec l'aide de l'intelligence artificielle" />
       </Helmet>
       
-      <div className="flex min-h-screen bg-[#F5F5DC]">
+      <div className="flex min-h-screen bg-gradient-to-b from-[#f1f8e9] to-[#e8f5e9]">
         <AdminSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="flex-1 p-4 md:p-8">
+        <div className="flex-1 p-4 md:p-8 overflow-auto">
           {/* Mobile header */}
           <div className="md:hidden mb-6 flex items-center justify-between">
-            <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
-              <Menu size={24} className="text-[#2E7D32]" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="text-[#2E7D32]"
+            >
+              <Menu size={24} />
             </Button>
-            <img src="/agrosub-logo.svg" alt="Logo" className="h-8 w-8" />
+            <div className="flex items-center">
+              <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-1 rounded-lg mr-1">
+                <div className="bg-white p-0.5 rounded-md">
+                  <div className="w-6 h-6 flex items-center justify-center rounded bg-gradient-to-r from-[#2e7d32] to-[#388e3c]">
+                    <span className="text-white font-bold text-xs">SV</span>
+                  </div>
+                </div>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
+                SubIvoir
+              </span>
+            </div>
           </div>
 
-          <div className="max-w-3xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-2xl md:text-3xl font-bold font-montserrat text-[#2E7D32]">
-                Modifier {type}
-              </h1>
-              <Badge className="uppercase bg-[#81C784]/30 text-[#2E7D32]">{type}</Badge>
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-8">
+              <div className="flex items-center mb-2">
+                <h1 className="text-2xl md:text-3xl font-bold text-[#2E7D32] mr-3">
+                  Éditer {type}
+                </h1>
+                <Badge className="uppercase bg-gradient-to-r from-[#2e7d32] to-[#388e3c] text-white">
+                  {type}
+                </Badge>
+              </div>
+              <p className="text-sm text-[#8B4513]">
+                Modifiez cette opportunité avec l'assistance de notre intelligence artificielle
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Common Fields */}
-              <div>
-                <label className="block font-poppins text-[#8B4513] mb-2">Titre *</label>
-                <Input
-                  defaultValue={getValues('title')}
-                  {...register('title', { required: true })}
-                  className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                />
-              </div>
-
-              <div>
-                <label className="block font-poppins text-[#8B4513] mb-2">Organisation *</label>
-                <Input
-                  defaultValue={getValues('organization')}
-                  {...register('organization', { required: true })}
-                  className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                />
-              </div>
-
-              {/* Type-specific Fields */}
-              {type === 'concours' && (
-                <>
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Récompenses</label>
-                    <div className="flex gap-2 mb-2">
-                      <Input
-                        value={newPrize}
-                        onChange={(e) => setNewPrize(e.target.value)}
-                        placeholder="Ajouter une récompense"
-                        className="border-[#8B4513]/30"
-                      />
-                      <Button 
-                        type="button" 
-                        onClick={() => { if (newPrize) { setPrizes([...prizes, newPrize]); setNewPrize(''); } }}
-                        className="bg-[#2E7D32] hover:bg-[#1B5E20]"
-                      >
-                        <Plus size={16} className="mr-2" />
-                        Ajouter
-                      </Button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {prizes.map((p,i) => (
-                        <Badge 
-                          key={i} 
-                          className="bg-[#81C784]/30 text-[#2E7D32] hover:bg-[#81C784]/40"
-                        >
-                          {p}
-                          <X 
-                            className="ml-1 cursor-pointer"
-                            onClick={() => setPrizes(prizes.filter((_,j) => j !== i))}
-                          />
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Critères d'évaluation *</label>
-                    <Textarea
-                      defaultValue={getValues('criteres_evaluation')}
-                      {...register('criteres_evaluation', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[120px]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Composition du jury *</label>
-                    <Textarea
-                      defaultValue={getValues('composition_jury')}
-                      {...register('composition_jury', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[100px]"
-                    />
-                  </div>
-                </>
-              )}
-
-              {type === 'formation' && (
-                <>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block font-poppins text-[#8B4513] mb-2">Durée *</label>
-                      <Input
-                        defaultValue={getValues('duree')}
-                        {...register('duree', { required: true })}
-                        className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Formateurs *</label>
-                    <Textarea
-                      defaultValue={getValues('formateurs')}
-                      {...register('formateurs', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[100px]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Emploi du temps *</label>
-                    <Textarea
-                      defaultValue={getValues('emploi_du_temps')}
-                      {...register('emploi_du_temps', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[100px]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Certification *</label>
-                    <Input
-                      defaultValue={getValues('certification')}
-                      {...register('certification', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                    />
-                  </div>
-                </>
-              )}
-
-              {type === 'projet' && (
-                <>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block font-poppins text-[#8B4513] mb-2">Durée *</label>
-                      <Input
-                        defaultValue={getValues('duree')}
-                        {...register('duree', { required: true })}
-                        className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-poppins text-[#8B4513] mb-2">Budget (FCFA) *</label>
-                      <Input
-                        type="number"
-                        defaultValue={getValues('budget')}
-                        {...register('budget', { required: true })}
-                        className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Partenaires *</label>
-                    <Textarea
-                      defaultValue={getValues('partenaires')}
-                      {...register('partenaires', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[100px]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Critères *</label>
-                    <Textarea
-                      defaultValue={getValues('criteres_specifiques')}
-                      {...register('criteres_specifiques', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[100px]"
-                    />
-                  </div>
-                </>
-              )}
-
-              {type === 'subvention' && (
-                <>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block font-poppins text-[#8B4513] mb-2">Budget total (FCFA) *</label>
-                      <Input
-                        type="number"
-                        defaultValue={getValues('budget')}
-                        {...register('budget', { required: true })}
-                        className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-poppins text-[#8B4513] mb-2">Montant max (FCFA) *</label>
-                      <Input
-                        type="number"
-                        defaultValue={getValues('montant_max')}
-                        {...register('montant_max', { required: true })}
-                        className="border-[#8B4513]/30 focus:border-[#2E7D32]"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Critères *</label>
-                    <Textarea
-                      defaultValue={getValues('criteres')}
-                      {...register('criteres', { required: true })}
-                      className="border-[#8B4513]/30 focus:border-[#2E7D32] min-h-[100px]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-poppins text-[#8B4513] mb-2">Image de couverture</label>
-                    <label className="flex items-center justify-center w-full h-32 border-2 border-dashed border-[#8B4513]/30 rounded-lg cursor-pointer hover:border-[#2E7D32]">
-                      <Upload className="h-6 w-6 text-[#8B4513] mr-2" />
-                      <span className="text-[#8B4513]">
-                        {existingCover ? 'Modifier l\'image' : 'Téléverser une image'}
-                      </span>
-                      <input 
-                        type="file" 
-                        {...register('couverture')}
-                        className="hidden"
-                        accept="image/*"
-                      />
-                    </label>
-                  </div>
-                </>
-              )}
-
-              {/* Documents requis */}
-              <div>
-                <label className="block font-poppins text-[#8B4513] mb-2">Documents requis *</label>
-                <Select onValueChange={handleDocumentSelect}>
-                  <SelectTrigger className="border-[#8B4513]/30 text-[#8B4513]">
-                    <SelectValue placeholder="Sélectionnez les documents" />
-                  </SelectTrigger>
-                  <SelectContent className="border-[#8B4513]/30">
-                    {documentOptions().map(doc => (
-                      <SelectItem 
-                        key={doc} 
-                        value={doc}
-                        className="hover:bg-[#81C784]/20"
-                      >
-                        {doc}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {selectedDocs.map((doc, index) => (
-                    <Badge 
-                      key={index} 
-                      className="bg-[#81C784]/30 text-[#2E7D32] hover:bg-[#81C784]/40"
-                    >
-                      {doc}
-                      <X 
-                        className="ml-1 cursor-pointer"
-                        onClick={() => setSelectedDocs(selectedDocs.filter(d => d !== doc))}
-                      />
-                    </Badge>
+            {/* Suggestions IA */}
+            {aiSuggestions.length > 0 && (
+              <div className="mb-8 bg-gradient-to-r from-[#e8f5e9] to-[#c8e6c9] p-4 rounded-xl border border-[#a5d6a7]">
+                <div className="flex items-center mb-3">
+                  <Bot className="h-5 w-5 text-[#2E7D32] mr-2" />
+                  <h3 className="font-bold text-[#2E7D32]">Suggestions de l'IA</h3>
+                </div>
+                <ul className="space-y-2">
+                  {aiSuggestions.map((suggestion, i) => (
+                    <li key={i} className="flex items-start">
+                      <Lightbulb className="h-4 w-4 text-[#8B4513] mt-0.5 mr-2 flex-shrink-0" />
+                      <span className="text-sm text-[#1b5e20]">{suggestion}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
+            )}
 
-              {/* Date et Statut */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block font-poppins text-[#8B4513] mb-2">Date limite *</label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-start text-left font-normal border-[#8B4513]/30 hover:border-[#2E7D32] text-[#8B4513]"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP", { locale: fr }) : "Choisir une date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        locale={fr}
-                        initialFocus
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Colonne de gauche - Champs communs */}
+                <div className="space-y-6">
+                  <div className="bg-white rounded-xl p-6 shadow-md border border-[#c8e6c9]">
+                    <h2 className="text-lg font-bold text-[#2E7D32] mb-4 flex items-center">
+                      <Sparkles className="h-5 w-5 mr-2 text-[#8B4513]" />
+                      Informations Générales
+                    </h2>
+                    
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-[#8B4513] mb-2">Titre *</label>
+                      <Input
+                        defaultValue={getValues('title')}
+                        {...register('title', { required: true })}
+                        className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
                       />
-                    </PopoverContent>
-                  </Popover>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-[#8B4513] mb-2">Organisation *</label>
+                      <Input
+                        defaultValue={getValues('organization')}
+                        {...register('organization', { required: true })}
+                        className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                      />
+                    </div>
+
+                    {/* Documents requis */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-[#8B4513] mb-2">Documents requis *</label>
+                      <Select onValueChange={handleDocumentSelect}>
+                        <SelectTrigger className="border-[#a5d6a7] text-[#8B4513] focus:ring-1 focus:ring-[#2E7D32]">
+                          <SelectValue placeholder="Sélectionnez les documents" />
+                        </SelectTrigger>
+                        <SelectContent className="border-[#a5d6a7]">
+                          {documentOptions().map(doc => (
+                            <SelectItem 
+                              key={doc} 
+                              value={doc}
+                              className="hover:bg-[#e8f5e9]"
+                            >
+                              {doc}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {selectedDocs.map((doc, index) => (
+                          <Badge 
+                            key={index} 
+                            className="bg-gradient-to-r from-[#81C784] to-[#a5d6a7] text-[#2E7D32] hover:opacity-90"
+                          >
+                            {doc}
+                            <X 
+                              className="ml-1 cursor-pointer"
+                              onClick={() => setSelectedDocs(selectedDocs.filter(d => d !== doc))}
+                            />
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Date et Statut */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Date limite *</label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button 
+                              variant="outline" 
+                              className="w-full justify-start text-left font-normal border-[#a5d6a7] hover:border-[#2E7D32] text-[#8B4513]"
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {date ? format(date, "PPP", { locale: fr }) : "Choisir une date"}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0 border-[#a5d6a7]" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={date}
+                              onSelect={setDate}
+                              locale={fr}
+                              initialFocus
+                              className="border-0"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Statut *</label>
+                        <Select 
+                          value={watch('status')} 
+                          onValueChange={(value) => setValue('status', value as any)}
+                        >
+                          <SelectTrigger className="border-[#a5d6a7] text-[#8B4513] focus:ring-1 focus:ring-[#2E7D32]">
+                            <SelectValue placeholder="Statut" />
+                          </SelectTrigger>
+                          <SelectContent className="border-[#a5d6a7]">
+                            <SelectItem value="brouillon" className="hover:bg-[#e8f5e9]">Brouillon</SelectItem>
+                            <SelectItem value="publié" className="hover:bg-[#e8f5e9]">Publié</SelectItem>
+                            <SelectItem value="archivé" className="hover:bg-[#e8f5e9]">Archivé</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block font-poppins text-[#8B4513] mb-2">Statut *</label>
-                  <Select 
-                    value={watch('status')} 
-                    onValueChange={(value) => setValue('status', value as any)}
-                  >
-                    <SelectTrigger className="border-[#8B4513]/30 text-[#8B4513]">
-                      <SelectValue placeholder="Statut" />
-                    </SelectTrigger>
-                    <SelectContent className="border-[#8B4513]/30">
-                      <SelectItem value="brouillon" className="hover:bg-[#81C784]/20">Brouillon</SelectItem>
-                      <SelectItem value="publié" className="hover:bg-[#81C784]/20">Publié</SelectItem>
-                      <SelectItem value="archivé" className="hover:bg-[#81C784]/20">Archivé</SelectItem>
-                    </SelectContent>
-                  </Select>
+                {/* Colonne de droite - Champs spécifiques au type */}
+                <div className="space-y-6">
+                  {type === 'concours' && (
+                    <div className="bg-white rounded-xl p-6 shadow-md border border-[#c8e6c9]">
+                      <h2 className="text-lg font-bold text-[#2E7D32] mb-4 flex items-center">
+                        <Bot className="h-5 w-5 mr-2 text-[#8B4513]" />
+                        Détails du Concours
+                      </h2>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Récompenses</label>
+                        <div className="flex gap-2 mb-2">
+                          <Input
+                            value={newPrize}
+                            onChange={(e) => setNewPrize(e.target.value)}
+                            placeholder="Ajouter une récompense"
+                            className="border-[#a5d6a7]"
+                          />
+                          <Button 
+                            type="button" 
+                            onClick={() => { if (newPrize) { setPrizes([...prizes, newPrize]); setNewPrize(''); } }}
+                            className="bg-gradient-to-r from-[#2E7D32] to-[#388e3c] text-white"
+                          >
+                            <Plus size={16} className="mr-2" />
+                            Ajouter
+                          </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {prizes.map((p,i) => (
+                            <Badge 
+                              key={i} 
+                              className="bg-gradient-to-r from-[#81C784] to-[#a5d6a7] text-[#2E7D32] hover:opacity-90"
+                            >
+                              {p}
+                              <X 
+                                className="ml-1 cursor-pointer"
+                                onClick={() => setPrizes(prizes.filter((_,j) => j !== i))}
+                              />
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Critères d'évaluation *</label>
+                        <Textarea
+                          defaultValue={getValues('criteres_evaluation')}
+                          {...register('criteres_evaluation', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[120px]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Composition du jury *</label>
+                        <Textarea
+                          defaultValue={getValues('composition_jury')}
+                          {...register('composition_jury', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[100px]"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {type === 'formation' && (
+                    <div className="bg-white rounded-xl p-6 shadow-md border border-[#c8e6c9]">
+                      <h2 className="text-lg font-bold text-[#2E7D32] mb-4 flex items-center">
+                        <Bot className="h-5 w-5 mr-2 text-[#8B4513]" />
+                        Détails de la Formation
+                      </h2>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Durée *</label>
+                        <Input
+                          defaultValue={getValues('duree')}
+                          {...register('duree', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                        />
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Formateurs *</label>
+                        <Textarea
+                          defaultValue={getValues('formateurs')}
+                          {...register('formateurs', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[100px]"
+                        />
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Emploi du temps *</label>
+                        <Textarea
+                          defaultValue={getValues('emploi_du_temps')}
+                          {...register('emploi_du_temps', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[100px]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Certification *</label>
+                        <Input
+                          defaultValue={getValues('certification')}
+                          {...register('certification', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {type === 'projet' && (
+                    <div className="bg-white rounded-xl p-6 shadow-md border border-[#c8e6c9]">
+                      <h2 className="text-lg font-bold text-[#2E7D32] mb-4 flex items-center">
+                        <Bot className="h-5 w-5 mr-2 text-[#8B4513]" />
+                        Détails du Projet
+                      </h2>
+
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm font-medium text-[#8B4513] mb-2">Durée *</label>
+                          <Input
+                            defaultValue={getValues('duree')}
+                            {...register('duree', { required: true })}
+                            className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#8B4513] mb-2">Budget (FCFA) *</label>
+                          <Input
+                            type="number"
+                            defaultValue={getValues('budget')}
+                            {...register('budget', { required: true })}
+                            className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Partenaires *</label>
+                        <Textarea
+                          defaultValue={getValues('partenaires')}
+                          {...register('partenaires', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[100px]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Critères *</label>
+                        <Textarea
+                          defaultValue={getValues('criteres_specifiques')}
+                          {...register('criteres_specifiques', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[100px]"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {type === 'subvention' && (
+                    <div className="bg-white rounded-xl p-6 shadow-md border border-[#c8e6c9]">
+                      <h2 className="text-lg font-bold text-[#2E7D32] mb-4 flex items-center">
+                        <Bot className="h-5 w-5 mr-2 text-[#8B4513]" />
+                        Détails de la Subvention
+                      </h2>
+
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm font-medium text-[#8B4513] mb-2">Budget total (FCFA) *</label>
+                          <Input
+                            type="number"
+                            defaultValue={getValues('budget')}
+                            {...register('budget', { required: true })}
+                            className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#8B4513] mb-2">Montant max (FCFA) *</label>
+                          <Input
+                            type="number"
+                            defaultValue={getValues('montant_max')}
+                            {...register('montant_max', { required: true })}
+                            className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Critères *</label>
+                        <Textarea
+                          defaultValue={getValues('criteres')}
+                          {...register('criteres', { required: true })}
+                          className="border-[#a5d6a7] focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] min-h-[100px]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-[#8B4513] mb-2">Image de couverture</label>
+                        <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#a5d6a7] rounded-lg cursor-pointer hover:border-[#2E7D32] transition-colors">
+                          {existingCover ? (
+                            <div className="text-[#8B4513]">
+                              <Upload className="h-6 w-6 mx-auto mb-2" />
+                              <span>Modifier l'image</span>
+                            </div>
+                          ) : (
+                            <div className="text-center p-4">
+                              <Upload className="h-8 w-8 mx-auto mb-2 text-[#8B4513]" />
+                              <span className="text-[#8B4513]">Téléverser une image</span>
+                              <p className="text-xs text-[#8B4513] mt-1">PNG, JPG, JPEG (max 2MB)</p>
+                            </div>
+                          )}
+                          <input 
+                            type="file" 
+                            {...register('couverture')}
+                            className="hidden"
+                            accept="image/*"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Boutons de soumission */}
-              <div className="flex gap-4">
-                <Button 
-                  type="submit" 
-                  disabled={loading}
-                  className="bg-[#2E7D32] hover:bg-[#1B5E20] font-poppins"
-                >
-                  {loading ? 'Enregistrement...' : 'Enregistrer'}
-                </Button>
+              <div className="flex gap-4 justify-end">
                 <Button 
                   variant="outline" 
                   onClick={() => navigate(-1)}
                   className="text-[#2E7D32] border-[#2E7D32] hover:bg-[#81C784]/20"
                 >
                   Annuler
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={loading}
+                  className="bg-gradient-to-r from-[#2E7D32] to-[#388e3c] text-white hover:opacity-90 min-w-[180px]"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      Enregistrement...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Enregistrer avec IA
+                    </>
+                  )}
                 </Button>
               </div>
             </form>

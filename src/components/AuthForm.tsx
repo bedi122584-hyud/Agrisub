@@ -1,11 +1,9 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
 import { 
   Card, 
   CardContent, 
@@ -23,11 +21,11 @@ interface AuthFormProps {
 }
 
 const profileTypes = [
-  { id: 'entrepreneur', label: 'Entrepreneur Agricole' },
-  { id: 'cooperative', label: 'Coopérative' },
-  { id: 'investor', label: 'Investisseur' },
-  { id: 'incubator', label: 'Incubateur' },
-  { id: 'institution', label: 'Institution' },
+  { id: 'agriculteur', label: 'Agriculteur/Éleveur' },
+  { id: 'cooperative', label: 'Coopérative agricole' },
+  { id: 'pme', label: 'PME Agroalimentaire' },
+  { id: 'investisseur', label: 'Investisseur' },
+  { id: 'institution', label: 'Institution publique' },
 ];
 
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
@@ -42,95 +40,101 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   const [name, setName] = useState('');
   const [profileType, setProfileType] = useState('');
   
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    if (mode === 'login') {
-      // Connexion utilisateur
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+    try {
+      if (mode === 'login') {
+        // Connexion utilisateur
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Récupération du profil
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', data.user?.id)
-        .single();
+        // Récupération du profil
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user?.id)
+          .single();
 
-      if (!profile) throw new Error('Profil utilisateur introuvable');
+        if (!profile) throw new Error('Profil utilisateur introuvable');
 
-      toast({
-        title: "Connexion réussie 🎉",
-        description: `Bienvenue ${profile.name}`
-      });
+        toast({
+          title: "Connexion réussie",
+          description: `Bienvenue ${profile.name} sur Subivoir`
+        });
 
-      navigate('/tableau-de-bord');
+        navigate('/tableau-de-bord');
 
-    } else {
-      // Inscription utilisateur
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            name,
-            profile_type: profileType
+      } else {
+        // Inscription utilisateur
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name,
+              profile_type: profileType
+            }
           }
-        }
-      });
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Vérification de la création du profil
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', data.user?.id)
-        .single();
+        // Vérification de la création du profil
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user?.id)
+          .single();
 
-      if (!profile) throw new Error('Échec de la création du profil');
+        if (!profile) throw new Error('Échec de la création du profil');
 
+        toast({
+          title: "Inscription réussie",
+          description: "Veuillez vérifier votre email pour confirmer votre compte"
+        });
+
+        navigate('/confirmation');
+      }
+
+    } catch (error: unknown) {
+      console.error('Erreur:', error);
+      let message = "Une erreur est survenue";
+      if (error instanceof Error) {
+        message = error.message;
+      }
       toast({
-        title: "Inscription réussie 🎉",
-        description: "Veuillez vérifier votre email pour confirmer votre compte"
+        variant: "destructive",
+        title: "Erreur",
+        description: message
       });
-
-      navigate('/confirmation');
+    } finally {
+      setIsLoading(false);
     }
-
-  } catch (error: any) {
-    console.error('Erreur:', error);
-    toast({
-      variant: "destructive",
-      title: "Erreur",
-      description: error.message || "Une erreur est survenue"
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
   
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>{mode === 'login' ? 'Connexion' : 'Inscription'}</CardTitle>
-        <CardDescription>
+    <Card className="w-full border border-subivoir-light/30 shadow-subivoir-light/20">
+      <CardHeader className="text-center space-y-2">
+        <CardTitle className="text-subivoir-dark text-2xl font-bold">
+          {mode === 'login' ? 'Connexion à SubIvoir' : 'Création de compte'}
+        </CardTitle>
+        <CardDescription className="text-subivoir-muted text-base">
           {mode === 'login' 
-            ? 'Connectez-vous à votre compte AgroSub' 
-            : 'Créez votre compte pour accéder à toutes les fonctionnalités'}
+            ? 'Accédez à votre espace de gestion des financements agricoles' 
+            : 'Rejoignez la plateforme officielle des financements agricoles'}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           {mode === 'register' && (
             <div className="space-y-2">
-              <Label htmlFor="name">Nom complet</Label>
+              <Label htmlFor="name" className="text-subivoir-dark">Nom complet</Label>
               <Input 
                 id="name" 
                 type="text" 
@@ -138,12 +142,13 @@ const handleSubmit = async (e: React.FormEvent) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                className="border-subivoir-light/50 focus:border-subivoir-primary"
               />
             </div>
           )}
           
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-subivoir-dark">Email institutionnel</Label>
             <Input 
               id="email" 
               type="email" 
@@ -151,11 +156,12 @@ const handleSubmit = async (e: React.FormEvent) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="border-subivoir-light/50 focus:border-subivoir-primary"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="password">Mot de passe</Label>
+            <Label htmlFor="password" className="text-subivoir-dark">Mot de passe</Label>
             <div className="relative">
               <Input 
                 id="password" 
@@ -164,10 +170,11 @@ const handleSubmit = async (e: React.FormEvent) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="border-subivoir-light/50 focus:border-subivoir-primary"
               />
               <button 
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-subivoir-muted hover:text-subivoir-dark"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -177,22 +184,35 @@ const handleSubmit = async (e: React.FormEvent) => {
           
           {mode === 'register' && (
             <div className="space-y-2">
-              <Label>Type de profil</Label>
+              <Label className="text-subivoir-dark">Type de profil</Label>
               <RadioGroup 
                 value={profileType} 
                 onValueChange={setProfileType}
                 required
+                className="grid grid-cols-1 gap-3"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {profileTypes.map((type) => (
-                    <div key={type.id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={type.id} id={`profile-${type.id}`} />
-                      <Label htmlFor={`profile-${type.id}`} className="cursor-pointer">
-                        {type.label}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
+                {profileTypes.map((type) => (
+                  <div 
+                    key={type.id} 
+                    className={`flex items-center space-x-3 p-3 rounded-lg border ${
+                      profileType === type.id 
+                        ? 'border-subivoir-primary bg-subivoir-primary/10' 
+                        : 'border-subivoir-light/30 hover:border-subivoir-light/50'
+                    }`}
+                  >
+                    <RadioGroupItem 
+                      value={type.id} 
+                      id={`profile-${type.id}`} 
+                      className="text-subivoir-primary border-subivoir-light/50"
+                    />
+                    <Label 
+                      htmlFor={`profile-${type.id}`} 
+                      className="cursor-pointer text-subivoir-dark font-normal"
+                    >
+                      {type.label}
+                    </Label>
+                  </div>
+                ))}
               </RadioGroup>
             </div>
           )}
@@ -200,7 +220,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         <CardFooter className="flex flex-col">
           <Button 
             type="submit" 
-            className="w-full bg-agro-primary hover:bg-agro-dark"
+            className="w-full bg-subivoir-primary hover:bg-subivoir-dark"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -209,37 +229,61 @@ const handleSubmit = async (e: React.FormEvent) => {
                 {mode === 'login' ? 'Connexion en cours...' : 'Inscription en cours...'}
               </>
             ) : (
-              mode === 'login' ? 'Se connecter' : "S'inscrire"
+              mode === 'login' ? 'Se connecter' : "Créer mon compte"
             )}
           </Button>
           
-          {mode === 'login' ? (
-            <div className="mt-4 text-center text-sm">
-              Pas encore de compte ? <Link to="/inscription" className="text-agro-primary hover:underline">S'inscrire</Link>
-              <div className="mt-2">
-                <Link to="/mot-de-passe-oublie" className="text-sm text-muted-foreground hover:text-agro-primary">
-                  Mot de passe oublié ?
+          <div className="mt-4 text-center text-sm text-subivoir-muted">
+            {mode === 'login' ? (
+              <>
+                <p>
+                  Pas encore de compte ?{' '}
+                  <Link 
+                    to="/inscription" 
+                    className="text-subivoir-primary hover:underline font-medium"
+                  >
+                    S'inscrire
+                  </Link>
+                </p>
+                <p className="mt-2">
+                  <Link 
+                    to="/mot-de-passe-oublie" 
+                    className="text-subivoir-primary hover:underline"
+                  >
+                    Mot de passe oublié ?
+                  </Link>
+                </p>
+              </>
+            ) : (
+              <p>
+                Déjà inscrit ?{' '}
+                <Link 
+                  to="/connexion" 
+                  className="text-subivoir-primary hover:underline font-medium"
+                >
+                  Se connecter
                 </Link>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-4 text-center text-sm">
-              Déjà inscrit ? <Link to="/connexion" className="text-agro-primary hover:underline">Se connecter</Link>
-            </div>
-          )}
+              </p>
+            )}
+          </div>
           
-          <div className="mt-6">
+          <div className="mt-6 w-full">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-subivoir-light/30"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-muted-foreground">Ou continuer avec</span>
+                <span className="px-2 bg-white text-subivoir-muted">Ou continuer avec</span>
               </div>
             </div>
             
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <Button variant="outline" type="button" disabled={isLoading}>
+              <Button 
+                variant="outline" 
+                type="button" 
+                disabled={isLoading}
+                className="border-subivoir-light/50 hover:border-subivoir-light/70 text-subivoir-dark"
+              >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -260,7 +304,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </svg>
                 Google
               </Button>
-              <Button variant="outline" type="button" disabled={isLoading}>
+              <Button 
+                variant="outline" 
+                type="button" 
+                disabled={isLoading}
+                className="border-subivoir-light/50 hover:border-subivoir-light/70 text-subivoir-dark"
+              >
                 <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path
                     d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"

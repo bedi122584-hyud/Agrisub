@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { motion } from "framer-motion";
 
 type Opportunity = { id: string | number; title: string; description: string };
 type Message = { role: "user" | "assistant"; content: string };
@@ -132,7 +133,7 @@ export default function OpportunitiesChat() {
     }
   };
 
-    const handleStartRecording = async () => {
+  const handleStartRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -213,62 +214,95 @@ export default function OpportunitiesChat() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 h-screen flex flex-col">
-      <h2 className="text-2xl font-semibold mb-4">🌱 Assistant Agro-Opportunités</h2>
+    <div className="h-full flex flex-col">
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-sm">💬</span>
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Assistant SubIvoir
+          </h1>
+        </div>
+        <p className="text-muted-foreground">
+          Discutez avec notre assistant pour découvrir les opportunités de financement adaptées à votre profil
+        </p>
+      </div>
 
       {loading ? (
-        <div className="animate-pulse space-y-3 mb-4">
-          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-200 rounded"></div>
+        <div className="animate-pulse space-y-3 mb-4 flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-gradient-to-r from-primary/10 to-secondary/10">
+              <div className="bg-gradient-to-r from-primary to-secondary w-8 h-8 rounded-full animate-pulse" />
+            </div>
+            <p className="text-muted-foreground">Chargement des opportunités...</p>
+          </div>
         </div>
       ) : (
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">
-            📋 Opportunités disponibles ({opportunities.length})
+        <div className="mb-6 bg-gradient-to-b from-muted/10 to-background rounded-xl p-4 border border-border/30">
+          <h3 className="text-lg font-semibold mb-3 flex items-center">
+            <span className="bg-gradient-to-r from-primary to-secondary text-background p-1 rounded mr-2">📋</span>
+            Opportunités disponibles ({opportunities.length})
           </h3>
-          <ul className="space-y-3 max-h-56 overflow-y-auto pr-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-56 overflow-y-auto pr-2">
             {opportunities.map((opp) => (
-              <li
+              <motion.div
                 key={opp.id}
-                className="border p-4 rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow"
+                whileHover={{ y: -5 }}
+                className="border border-border/30 p-3 rounded-lg bg-gradient-to-b from-background to-muted/5 hover:shadow-md transition-all"
               >
-                <h3 className="font-medium text-gray-800 mb-1">{opp.title}</h3>
-                <p className="text-gray-600 text-sm">
-                  {opp.description.length > 200
-                    ? `${opp.description.slice(0, 200)}...`
+                <h5 className="font-medium text-foreground mb-1">{opp.title}</h5>
+                <p className="text-muted-foreground text-sm">
+                  {opp.description.length > 100
+                    ? `${opp.description.slice(0, 100)}...`
                     : opp.description}
                 </p>
-              </li>
+              </motion.div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
 
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto bg-gray-50 p-4 mb-4 rounded-xl border border-gray-200 shadow-inner"
+        className="flex-1 overflow-y-auto bg-gradient-to-b from-background to-muted/5 p-4 mb-4 rounded-xl border border-border/30 shadow-inner"
       >
+        {messages.length === 0 && (
+          <div className="h-full flex flex-col items-center justify-center text-center p-8 text-muted-foreground">
+            <div className="mb-4 bg-gradient-to-r from-primary/10 to-secondary/10 p-4 rounded-full">
+              <div className="text-4xl">💬</div>
+            </div>
+            <h3 className="text-xl font-medium text-foreground mb-2">Commencez la conversation</h3>
+            <p>Posez votre première question à l'assistant SubIvoir</p>
+            <p className="mt-2 text-sm">Ex: "Quelles opportunités correspondent à mon profil?"</p>
+          </div>
+        )}
+
         {messages.map((msg, index) => (
-          <div
+          <motion.div
             key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className={`my-3 ${msg.role === "user" ? "text-right" : "text-left"}`}
           >
             <div
-              className={`inline-block p-4 rounded-2xl max-w-3xl break-words ${
+              className={`inline-block p-4 rounded-2xl max-w-3xl break-words shadow-sm ${
                 msg.role === "user"
-                  ? "bg-blue-100 ml-auto hover:bg-blue-50"
-                  : "bg-white border-gray-200 border hover:bg-gray-50"
+                  ? "bg-gradient-to-r from-primary/10 to-secondary/10 ml-auto border border-primary/20"
+                  : "bg-gradient-to-b from-background to-muted/5 border border-border/30"
               } transition-colors`}
             >
               {msg.role === "assistant" ? (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <ReactMarkdown
                     components={{
                       strong: ({ node, ...props }) => (
-                        <strong className="text-green-800 font-semibold" {...props} />
+                        <strong className="text-primary font-semibold" {...props} />
                       ),
                       p: ({ node, ...props }) => (
-                        <p className="mb-3 last:mb-0 leading-relaxed" {...props} />
+                        <p className="mb-3 last:mb-0 leading-relaxed text-foreground" {...props} />
                       ),
                     }}
                   >
@@ -276,47 +310,45 @@ export default function OpportunitiesChat() {
                   </ReactMarkdown>
                 </div>
               ) : (
-                <p className="text-gray-800">{msg.content}</p>
+                <p className="text-foreground">{msg.content}</p>
               )}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="flex gap-2 items-center">
-        <input
-          type="text"
-          placeholder="Écrivez votre message ici..."
-          className="flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-200"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          disabled={sending}
-        />
+      <div className="flex gap-3 items-center">
+        <div className="flex-1 relative">
+          <input
+            type="text"
+            placeholder="Écrivez votre message ici..."
+            className="w-full border-2 border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-background text-foreground"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            disabled={sending}
+          />
+          <button
+            onClick={recording ? handleStopRecording : handleStartRecording}
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
+              recording ? "text-red-500 animate-pulse" : "text-muted-foreground"
+            }`}
+          >
+            {recording ? "⏺️" : "🎤"}
+          </button>
+        </div>
+        
         <button
           onClick={() => handleSend()}
-          disabled={sending}
-          className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          disabled={sending || recording}
+          className="px-5 py-3 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-background rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
         >
           {sending ? (
-            <>
-              <span className="animate-spin">⏳</span>
-              Envoi...
-            </>
+            <span className="animate-spin">⏳</span>
           ) : (
-            <>
-              <span>📬</span>
-              Envoyer
-            </>
+            <span>📬</span>
           )}
-        </button>
-        <button
-          onClick={recording ? handleStopRecording : handleStartRecording}
-          className={`ml-2 px-4 py-3 rounded-xl text-white font-medium transition-colors ${
-            recording ? "bg-red-600 hover:bg-red-700" : "bg-gray-500 hover:bg-gray-600"
-          }`}
-        >
-          {recording ? "⏹️ Stop" : ""}
+          {sending ? "Envoi..." : "Envoyer"}
         </button>
       </div>
     </div>

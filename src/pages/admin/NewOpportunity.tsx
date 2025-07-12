@@ -105,7 +105,9 @@ const NewOpportunity = () => {
       </Helmet>
       
       <div className="flex min-h-screen">
-        <AdminSidebar />
+        <AdminSidebar sidebarOpen={false} setSidebarOpen={function (open: boolean): void {
+          throw new Error('Function not implemented.');
+        } } />
         
         <div className="flex-1 p-8">
           <div className="max-w-3xl mx-auto">

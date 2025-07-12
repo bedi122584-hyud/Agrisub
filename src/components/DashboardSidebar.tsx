@@ -4,8 +4,8 @@ import {
   Home,
   FileText,
   Users,
-  MessageSquare,
-  BarChart3,
+  Mail,
+  BarChart,
   Settings,
   ChevronDown,
   ChevronRight,
@@ -13,12 +13,20 @@ import {
   PlusCircle,
   Search,
   Calendar,
-  Lightbulb,
+  BookOpen,
+  FolderPlus,
+  FileSpreadsheet,
+  FileStack,
+  FileCheck,
+  History,
+  UserCircle,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -43,30 +51,56 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         <button
           onClick={() => setExpanded(!expanded)}
           className={cn(
-            "flex items-center w-full py-3 px-4 rounded-lg text-sm font-medium",
+            "flex items-center w-full py-3 px-4 rounded-xl text-sm font-medium transition-all group",
             active 
-              ? "text-white bg-agro-primary" 
-              : "text-agro-dark hover:bg-agro-secondary/20"
+              ? "text-background bg-gradient-to-r from-primary to-secondary shadow-lg" 
+              : "text-foreground/80 hover:bg-muted/50 hover:text-primary"
           )}
         >
-          {icon}
-          <span className="ml-3 flex-1">{label}</span>
-          {expanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+          <div className="flex items-center">
+            <div className={cn(
+              "p-1.5 rounded-lg",
+              active 
+                ? "bg-background/20 text-background" 
+                : "bg-gradient-to-r from-primary/10 to-secondary/10 text-primary"
+            )}>
+              {icon}
+            </div>
+            <span className="ml-3 flex-1 text-left">{label}</span>
+          </div>
+          {expanded ? 
+            <ChevronDown size={18} className={active ? "text-background/80" : "text-foreground/60"} /> : 
+            <ChevronRight size={18} className={active ? "text-background/80" : "text-foreground/60"} />
+          }
         </button>
         
-        {expanded && (
-          <div className="mt-1 ml-4 pl-4 border-l border-gray-200">
-            {children.map((child, i) => (
-              <Link
-                key={i}
-                to={child.href}
-                className="flex items-center py-2 px-4 rounded-lg text-sm text-agro-dark hover:bg-agro-secondary/20"
-              >
-                {child.label}
-              </Link>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="ml-4 pl-4 border-l border-muted/20 overflow-hidden"
+            >
+              {children.map((child, i) => (
+                <Link
+                  key={i}
+                  to={child.href}
+                  className={cn(
+                    "flex items-center py-2 px-4 rounded-lg text-sm transition-colors",
+                    location.pathname === child.href
+                      ? "text-primary font-medium"
+                      : "text-foreground/70 hover:text-primary"
+                  )}
+                >
+                  <div className="w-1 h-1 rounded-full bg-muted-foreground mr-3"></div>
+                  {child.label}
+                </Link>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -75,13 +109,20 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     <Link
       to={href || '#'}
       className={cn(
-        "flex items-center py-3 px-4 rounded-lg text-sm font-medium",
+        "flex items-center py-3 px-4 rounded-xl text-sm font-medium transition-colors group",
         active 
-          ? "text-white bg-agro-primary" 
-          : "text-agro-dark hover:bg-agro-secondary/20"
+          ? "text-background bg-gradient-to-r from-primary to-secondary shadow-lg" 
+          : "text-foreground/80 hover:bg-muted/50 hover:text-primary"
       )}
     >
-      {icon}
+      <div className={cn(
+        "p-1.5 rounded-lg",
+        active 
+          ? "bg-background/20 text-background" 
+          : "bg-gradient-to-r from-primary/10 to-secondary/10 text-primary"
+      )}>
+        {icon}
+      </div>
       <span className="ml-3">{label}</span>
     </Link>
   );
@@ -91,7 +132,14 @@ const DashboardSidebar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [profile, setProfile] = useState<any>(null);
+  interface Profile {
+    id: string;
+    name: string;
+    profile_type: string;
+    avatar_url?: string;
+  }
+
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -104,7 +152,7 @@ const DashboardSidebar: React.FC = () => {
 
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, name, profile_type, avatar_url')
         .eq('id', user.id)
         .single();
 
@@ -134,113 +182,174 @@ const DashboardSidebar: React.FC = () => {
     },
     {
       icon: <Search size={20} />,
-      label: "Opportunités",
+      label: "Financements",
       href: "/opportunites",
     },
     {
-      icon: <FileText size={20} />,
-      label: "Mes projets",
+      icon: <FolderPlus size={20} />,
+      label: "Mes dossiers",
       children: [
-        { label: "Tous les projets", href: "/mes-projets" },
-        { label: "Créer un projet", href: "/mes-projets/nouveau" },
+        { label: "Tous mes dossiers", href: "/mes-dossiers" },
+        { label: "Nouvelle demande", href: "/mes-dossiers/nouveau" },
       ],
     },
     {
-      icon: <Calendar size={20} />,
-      label: "Candidatures",
+      icon: <FileCheck size={20} />,
+      label: "Suivi des demandes",
       children: [
-        { label: "En cours", href: "/candidatures/en-cours" },
-        { label: "Historique", href: "/candidatures/historique" },
+        { label: "En cours d'instruction", href: "/candidatures/en-cours" },
+        { label: "Historique des demandes", href: "/candidatures/historique" },
       ],
     },
     {
-      icon: <Lightbulb size={20} />,
-      label: "Business Plan IA",
-      href: "/business-plan",
+      icon: <FileSpreadsheet size={20} />,
+      label: "Modèles de dossiers",
+      href: "/modeles-dossiers",
     },
     {
-      icon: <MessageSquare size={20} />,
-      label: "Messages",
-      href: "/tableau-de-bord/messages",
+      icon: <BookOpen size={20} />,
+      label: "Guides de montage",
+      href: "/guides",
     },
     {
-      icon: <Users size={20} />,
-      label: "Réseau",
-      href: "/reseau",
+      icon: <Mail size={20} />,
+      label: "Messagerie",
+      href: "/messages",
     },
     {
-      icon: <BarChart3 size={20} />,
+      icon: <BarChart size={20} />,
       label: "Statistiques",
       href: "/statistiques",
     },
     {
       icon: <Settings size={20} />,
       label: "Paramètres",
-      href: "/tableau-de-bord/parametres", // Chemin complet
+      href: "/parametres",
     },
-  ];
-  if (loading) return null;
+  ]; 
+
+  if (loading) return (
+    <aside className="w-64 bg-background border-r border-border h-screen sticky top-0 overflow-y-auto">
+      <div className="px-4 py-6">
+        <div className="flex items-center mb-8">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl animate-pulse">
+            <div className="h-8 w-8 bg-background/30 rounded-md" />
+          </div>
+          <div className="ml-2 h-6 bg-muted rounded-md w-32" />
+        </div>
+        <div className="space-y-2">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="h-12 bg-muted rounded-xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 h-screen sticky top-0 overflow-y-auto">
+    <aside className="w-64 bg-background border-r border-border h-screen sticky top-0 overflow-y-auto">
       <div className="px-4 py-6">
-        {/* En-tête */}
-        <div className="flex items-center mb-8">
-          <img 
-            src="/agrosub-logo.svg" 
-            alt="AgroSub Logo" 
-            className="h-8 w-8"
-            onError={(e) => {
-              e.currentTarget.src = "https://via.placeholder.com/32x32?text=AS";
-            }}
-          />
-          <span className="ml-2 text-xl font-bold text-agro-primary">AgroSub</span>
-        </div>
+        {/* Logo SubIvoir */}
+        <motion.div 
+          className="flex items-center mb-8"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl shadow-lg">
+            <div className="bg-background p-1 rounded-lg">
+              <div className="w-8 h-8 flex items-center justify-center rounded bg-gradient-to-r from-primary to-secondary">
+                <span className="text-white font-bold text-xs">SV</span>
+              </div>
+            </div>
+          </div>
+          <motion.span 
+            className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            SubIvoir
+          </motion.span>
+        </motion.div>
 
-        
         {/* Profil utilisateur */}
         {profile && (
-          <div className="mb-6 p-4 bg-agro-light/50 rounded-lg">
+          <motion.div 
+            className="mb-6 p-4 bg-gradient-to-b from-muted/10 to-background rounded-xl border border-border shadow-sm"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
             <div className="flex items-center mb-3">
-              <div className="w-10 h-10 rounded-full bg-agro-primary text-white flex items-center justify-center font-bold">
-                {profile.name.substring(0, 2).toUpperCase()}
-              </div>
+              {profile.avatar_url ? (
+                <img 
+                  src={profile.avatar_url} 
+                  alt={profile.name}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-primary"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-secondary text-background flex items-center justify-center font-bold shadow-sm">
+                  {profile.name.substring(0, 2).toUpperCase()}
+                </div>
+              )}
               <div className="ml-3">
-                <h3 className="font-medium text-agro-dark">{profile.name}</h3>
-                <p className="text-xs text-gray-500 capitalize">{profile.profile_type}</p>
+                <h3 className="font-medium text-foreground">{profile.name}</h3>
+                <p className="text-xs text-muted-foreground capitalize">
+                  {profile.profile_type === 'agriculteur' ? 'Exploitant agricole' : profile.profile_type}
+                </p>
               </div>
             </div>
             <Link 
-              to="/mes-projets/nouveau" 
-              className="flex items-center text-sm text-agro-primary hover:underline"
+              to="/mes-dossiers/nouveau" 
+              className="flex items-center text-sm font-medium transition-colors group"
             >
-              <PlusCircle size={16} className="mr-2" />
-              Nouveau projet
+              <div className="bg-gradient-to-r from-primary/20 to-secondary/20 p-1 rounded-lg group-hover:from-primary/30">
+                <PlusCircle size={16} className="text-primary" />
+              </div>
+              <span className="ml-2 text-primary group-hover:underline">Nouvelle demande</span>
             </Link>
-          </div>
+          </motion.div>
         )}
 
         {/* Navigation */}
         <nav className="space-y-1">
-          {navItems.map((item, i) => (
-            <SidebarItem
-              key={i}
-              icon={item.icon}
-              label={item.label}
-              href={item.href}
-              active={location.pathname === item.href}
-              children={item.children}
-            />
-          ))}
-          
-          <button
-            onClick={handleLogout}
-            className="flex items-center w-full py-3 px-4 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 mt-4"
-          >
-            <LogOut size={20} />
-            <span className="ml-3">Se déconnecter</span>
-          </button>
+          <AnimatePresence>
+            {navItems.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * (i + 1) }}
+                className="mb-1"
+              >
+                <SidebarItem
+                  icon={item.icon}
+                  label={item.label}
+                  href={item.href}
+                  active={location.pathname === item.href || 
+                          (item.children && item.children.some(child => 
+                            location.pathname === child.href))}
+                  children={item.children}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </nav>
+
+        {/* Déconnexion */}
+        <motion.button
+          onClick={handleLogout}
+          className="flex items-center w-full py-3 px-4 rounded-xl text-sm font-medium text-muted-foreground hover:bg-muted/50 hover:text-destructive transition-colors group mt-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <div className="bg-destructive/10 p-1.5 rounded-lg group-hover:bg-destructive/20">
+            <LogOut size={20} className="text-destructive" />
+          </div>
+          <span className="ml-3 group-hover:underline">Se déconnecter</span>
+        </motion.button>
       </div>
     </aside>
   );

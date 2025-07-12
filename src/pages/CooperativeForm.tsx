@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
-// import { Label } from "recharts";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -206,28 +206,56 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
     }
   };
 
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto p-4 space-y-8">
+    <motion.form 
+      onSubmit={handleSubmit(onSubmit)} 
+      className="max-w-4xl mx-auto p-4 space-y-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Section 1: Informations générales */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">1. Informations générales</h3>
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">1</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Informations générales
+          </h3>
+        </div>
+        
         <div>
-          <Label htmlFor="coop_name">Nom de la coopérative *</Label>
+          <Label htmlFor="coop_name" className="font-medium text-foreground/80">Nom de la coopérative *</Label>
           <Input
             id="coop_name"
+            className="bg-background border-border/50 focus:border-primary"
             {...register("coop_name", { required: "Champ obligatoire" })}
           />
           {errors.coop_name && (
-            <p className="text-red-600">{errors.coop_name.message}</p>
+            <p className="text-red-500 mt-1">{errors.coop_name.message}</p>
           )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <Label htmlFor="creation_year">Année de création</Label>
+            <Label htmlFor="creation_year" className="font-medium text-foreground/80">Année de création</Label>
             <Input
               id="creation_year"
               type="number"
+              className="bg-background border-border/50"
               {...register("creation_year", {
                 min: 1900,
                 max: new Date().getFullYear(),
@@ -236,55 +264,106 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
           </div>
           
           <div>
-            <Label htmlFor="legal_status">Statut juridique</Label>
-            <Input id="legal_status" {...register("legal_status")} />
+            <Label htmlFor="legal_status" className="font-medium text-foreground/80">Statut juridique</Label>
+            <Input 
+              id="legal_status" 
+              className="bg-background border-border/50"
+              {...register("legal_status")} 
+            />
           </div>
           
           <div>
-            <Label htmlFor="registration_number">Numéro d'enregistrement</Label>
-            <Input id="registration_number" {...register("registration_number")} />
+            <Label htmlFor="registration_number" className="font-medium text-foreground/80">Numéro d'enregistrement</Label>
+            <Input 
+              id="registration_number" 
+              className="bg-background border-border/50"
+              {...register("registration_number")} 
+            />
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 2: Localisation */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">2. Localisation</h3>
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">2</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Localisation
+          </h3>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <Label htmlFor="region">Région</Label>
-            <Input id="region" {...register("region")} />
+            <Label htmlFor="region" className="font-medium text-foreground/80">Région</Label>
+            <Input 
+              id="region" 
+              className="bg-background border-border/50"
+              {...register("region")} 
+            />
           </div>
           
           <div>
-            <Label htmlFor="department">Département</Label>
-            <Input id="department" {...register("department")} />
+            <Label htmlFor="department" className="font-medium text-foreground/80">Département</Label>
+            <Input 
+              id="department" 
+              className="bg-background border-border/50"
+              {...register("department")} 
+            />
           </div>
           
           <div>
-            <Label htmlFor="locality">Localité</Label>
-            <Input id="locality" {...register("locality")} />
+            <Label htmlFor="locality" className="font-medium text-foreground/80">Localité</Label>
+            <Input 
+              id="locality" 
+              className="bg-background border-border/50"
+              {...register("locality")} 
+            />
           </div>
           
           <div>
-            <Label htmlFor="gps_coordinates">Coordonnées GPS</Label>
+            <Label htmlFor="gps_coordinates" className="font-medium text-foreground/80">Coordonnées GPS</Label>
             <Input
               id="gps_coordinates"
               placeholder="lat,lon"
+              className="bg-background border-border/50"
               {...register("gps_coordinates")}
             />
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 3: Spécialisation agricole */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">3. Spécialisation agricole</h3>
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">3</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Spécialisation agricole
+          </h3>
+        </div>
         
         <div>
-          <Label>Principales cultures (séparées par des virgules)</Label>
+          <Label className="font-medium text-foreground/80">Principales cultures (séparées par des virgules)</Label>
           <Input
             placeholder="Ex: Maïs, Tomate, Riz"
+            className="bg-background border-border/50"
             {...register("main_crops", {
               setValueAs: (v) => {
                 if (Array.isArray(v)) return v;
@@ -296,19 +375,20 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="total_area_hectares">Superficie totale (hectares)</Label>
+            <Label htmlFor="total_area_hectares" className="font-medium text-foreground/80">Superficie totale (hectares)</Label>
             <Input
               id="total_area_hectares"
               type="number"
+              className="bg-background border-border/50"
               {...register("total_area_hectares", { valueAsNumber: true })}
             />
           </div>
           
           <div>
-            <Label>Méthode de production</Label>
+            <Label className="font-medium text-foreground/80">Méthode de production</Label>
             <select
               {...register("production_method")}
-              className="w-full border rounded-md p-2"
+              className="w-full bg-background border border-border/50 rounded-md p-2 focus:ring-2 focus:ring-primary/30"
             >
               <option value="">Sélectionner...</option>
               {productionMethods.map((method) => (
@@ -319,16 +399,21 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
         </div>
 
         <div>
-          <Label>Infrastructures disponibles</Label>
+          <Label className="font-medium text-foreground/80">Infrastructures disponibles</Label>
           <Controller
             control={control}
             name="infrastructures"
             render={({ field }) => (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
                 {infrastructuresOptions.map((infra) => (
-                  <label key={infra} className="flex items-center space-x-2">
+                  <motion.label 
+                    key={infra} 
+                    className="flex items-center space-x-2 bg-background p-2 rounded-lg border border-border/20 hover:border-primary/50 transition-colors cursor-pointer"
+                    whileHover={{ y: -3 }}
+                  >
                     <input
                       type="checkbox"
+                      className="accent-primary"
                       checked={field.value?.includes(infra)}
                       onChange={() => handleMultiSelectToggle(
                         field.value,
@@ -336,43 +421,60 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
                         field.onChange
                       )}
                     />
-                    <span>{infra}</span>
-                  </label>
+                    <span className="text-foreground/90">{infra}</span>
+                  </motion.label>
                 ))}
               </div>
             )}
           />
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 4: Composition */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">4. Composition de la coopérative</h3>
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">4</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Composition de la coopérative
+          </h3>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <Label htmlFor="members_total">Nombre total de membres</Label>
+            <Label htmlFor="members_total" className="font-medium text-foreground/80">Nombre total de membres</Label>
             <Input
               id="members_total"
               type="number"
+              className="bg-background border-border/50"
               {...register("members_total", { valueAsNumber: true })}
             />
           </div>
           
           <div>
-            <Label htmlFor="members_women">Nombre de femmes</Label>
+            <Label htmlFor="members_women" className="font-medium text-foreground/80">Nombre de femmes</Label>
             <Input
               id="members_women"
               type="number"
+              className="bg-background border-border/50"
               {...register("members_women", { valueAsNumber: true })}
             />
           </div>
           
           <div>
-            <Label htmlFor="members_men">Nombre d'hommes</Label>
+            <Label htmlFor="members_men" className="font-medium text-foreground/80">Nombre d'hommes</Label>
             <Input
               id="members_men"
               type="number"
+              className="bg-background border-border/50"
               {...register("members_men", { valueAsNumber: true })}
             />
           </div>
@@ -380,25 +482,31 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="average_age_range">Tranche d'âge moyenne</Label>
+            <Label htmlFor="average_age_range" className="font-medium text-foreground/80">Tranche d'âge moyenne</Label>
             <Input
               id="average_age_range"
               placeholder="Ex: 35-50"
+              className="bg-background border-border/50"
               {...register("average_age_range")}
             />
           </div>
           
           <div>
-            <Label>Niveau d'éducation des membres</Label>
+            <Label className="font-medium text-foreground/80">Niveau d'éducation des membres</Label>
             <Controller
               control={control}
               name="members_education"
               render={({ field }) => (
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 mt-2">
                   {educationOptions.map((option) => (
-                    <label key={option} className="flex items-center space-x-2">
+                    <motion.label 
+                      key={option} 
+                      className="flex items-center space-x-2 bg-background p-2 rounded-lg border border-border/20 hover:border-primary/50 transition-colors cursor-pointer"
+                      whileHover={{ y: -3 }}
+                    >
                       <input
                         type="checkbox"
+                        className="accent-primary"
                         checked={
                           Array.isArray(field.value)
                             ? field.value.includes(option)
@@ -416,51 +524,98 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
                           field.onChange(newValues.join(", "));
                         }}
                       />
-                      <span>{option}</span>
-                    </label>
+                      <span className="text-foreground/90">{option}</span>
+                    </motion.label>
                   ))}
                 </div>
               )}
             />
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 5: Contact */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">5. Contact</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="representative_name">Nom du représentant</Label>
-            <Input id="representative_name" {...register("representative_name")} />
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">5</span>
+            </div>
           </div>
-          
-          <div>
-            <Label htmlFor="phone">Téléphone</Label>
-            <Input id="phone" {...register("phone")} />
-          </div>
-          
-          <div>
-            <Label htmlFor="whatsapp">WhatsApp</Label>
-            <Input id="whatsapp" {...register("whatsapp")} />
-          </div>
-          
-          <div>
-            <Label htmlFor="email">Email de contact</Label>
-            <Input id="email" type="email" {...register("email")} />
-          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Contact
+          </h3>
         </div>
-      </section>
-
-      {/* Section 6: Documents */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">6. Documents justificatifs</h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label>Accréditation</Label>
+            <Label htmlFor="representative_name" className="font-medium text-foreground/80">Nom du représentant</Label>
+            <Input 
+              id="representative_name" 
+              className="bg-background border-border/50"
+              {...register("representative_name")} 
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="phone" className="font-medium text-foreground/80">Téléphone</Label>
+            <Input 
+              id="phone" 
+              className="bg-background border-border/50"
+              {...register("phone")} 
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="whatsapp" className="font-medium text-foreground/80">WhatsApp</Label>
+            <Input 
+              id="whatsapp" 
+              className="bg-background border-border/50"
+              {...register("whatsapp")} 
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="email" className="font-medium text-foreground/80">Email de contact</Label>
+            <Input 
+              id="email" 
+              type="email" 
+              className="bg-background border-border/50"
+              {...register("email")} 
+            />
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Section 6: Documents */}
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">6</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Documents justificatifs
+          </h3>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label className="font-medium text-foreground/80">Accréditation</Label>
             <Input
               type="file"
+              className="bg-background border-border/50 file:bg-gradient-to-r file:from-primary/10 file:to-secondary/10 file:text-primary file:border-0 file:rounded-md file:mr-2"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
@@ -473,9 +628,10 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
           </div>
           
           <div>
-            <Label>Statuts</Label>
+            <Label className="font-medium text-foreground/80">Statuts</Label>
             <Input
               type="file"
+              className="bg-background border-border/50 file:bg-gradient-to-r file:from-primary/10 file:to-secondary/10 file:text-primary file:border-0 file:rounded-md file:mr-2"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
@@ -488,9 +644,10 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
           </div>
           
           <div>
-            <Label>Photo de groupe</Label>
+            <Label className="font-medium text-foreground/80">Photo de groupe</Label>
             <Input
               type="file"
+              className="bg-background border-border/50 file:bg-gradient-to-r file:from-primary/10 file:to-secondary/10 file:text-primary file:border-0 file:rounded-md file:mr-2"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
@@ -503,10 +660,11 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
           </div>
           
           <div>
-            <Label>Certificats</Label>
+            <Label className="font-medium text-foreground/80">Certificats</Label>
             <Input
               type="file"
               multiple
+              className="bg-background border-border/50 file:bg-gradient-to-r file:from-primary/10 file:to-secondary/10 file:text-primary file:border-0 file:rounded-md file:mr-2"
               onChange={async (e) => {
                 const files = Array.from(e.target.files || []);
                 const urls = await Promise.all(
@@ -520,20 +678,40 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
             />
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 7: Objectifs */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold">7. Objectifs & besoins</h3>
+      <motion.section 
+        className="space-y-4 bg-gradient-to-b from-background to-muted/10 p-6 rounded-xl border border-border/30 shadow-sm"
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+            <div className="bg-background p-1 rounded-lg">
+              <span className="text-white font-bold text-xs">7</span>
+            </div>
+          </div>
+          <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Objectifs & besoins
+          </h3>
+        </div>
+        
         <Controller
           control={control}
           name="objectives"
           render={({ field }) => (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {objectivesOptions.map((objective) => (
-                <label key={objective} className="flex items-center space-x-2">
+                <motion.label 
+                  key={objective} 
+                  className="flex items-center space-x-2 bg-background p-2 rounded-lg border border-border/20 hover:border-primary/50 transition-colors cursor-pointer"
+                  whileHover={{ y: -3 }}
+                >
                   <input
                     type="checkbox"
+                    className="accent-primary"
                     checked={field.value?.includes(objective)}
                     onChange={() => handleMultiSelectToggle(
                       field.value,
@@ -541,31 +719,37 @@ const CooperativeForm: React.FC<CooperativeFormProps> = ({
                       field.onChange
                     )}
                   />
-                  <span>{objective}</span>
-                </label>
+                  <span className="text-foreground/90">{objective}</span>
+                </motion.label>
               ))}
             </div>
           )}
         />
-      </section>
+      </motion.section>
 
       <div className="flex gap-4 mt-8">
-        <Button type="submit" disabled={isSubmitting || fileUploading}>
+        <Button 
+          type="submit" 
+          disabled={isSubmitting || fileUploading}
+          className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-background shadow-lg transition-all"
+        >
           {isSubmitting || fileUploading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : null}
           {initialData ? "Mettre à jour" : "Enregistrer"}
         </Button>
+        
         <Button
           type="button"
           variant="outline"
           onClick={onSkip}
           disabled={isSubmitting || fileUploading}
+          className="border-border hover:bg-muted/20"
         >
           Annuler
         </Button>
       </div>
-    </form>
+    </motion.form>
   );
 };
 

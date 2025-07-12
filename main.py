@@ -2,7 +2,6 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import fitz  # PyMuPDF
 import openai
-import requests
 from supabase import create_client
 from uuid import uuid4
 from typing import Any, Dict
@@ -13,14 +12,13 @@ app = FastAPI()
 # === CORS (si ton frontend tourne sur d’autres ports) ===
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:8080"],  # ajoute localhost:8080
+    allow_origins=["http://localhost:3000", "http://localhost:8080"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # === CONFIGURATION ===
 OPENAI_API_KEY   = "REMOVED"
-MISTRAL_API_KEY  = "8QhcjNzFzME2EcPiP17gw2MYtyzAIQsj"
 SUPABASE_URL     = "https://gwznesrrbmgmymulzbqd.supabase.co"
 SUPABASE_KEY     = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3em5lc3JyYm1nbXltdWx6YnFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0ODkyMzYsImV4cCI6MjA2MzA2NTIzNn0.IXAXvaGrGhSBi6dnoVYBD-3udtnw9PaWhuEOp2lwbAY"
 
@@ -29,12 +27,10 @@ openai.api_key = OPENAI_API_KEY
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
-    """Extrait le texte d'un PDF en mémoire"""
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     return "\n".join(page.get_text() for page in doc)
 
 def summarize_with_chatgpt(text: str) -> str:
-    """Génère un résumé structuré avec ChatGPT"""
     system_prompt = (
         "Tu es un expert en analyse d'appels à projets agricoles. Génère un résumé STRUCTURÉ en français descriptif et compréhensif pour des personnes peu instruites avec ces sections :\n"
         "Titre: [Nom officiel de l'opportunité]\n"
@@ -50,7 +46,6 @@ def summarize_with_chatgpt(text: str) -> str:
         "Avantages: [Liste à puces des points forts]\n"
         "Documents requis: [Liste à puces des pièces nécessaires]"
     )
-    
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-1106",
@@ -65,11 +60,8 @@ def summarize_with_chatgpt(text: str) -> str:
         raise HTTPException(status_code=500, detail=f"Erreur OpenAI: {str(e)}")
 
 def parse_summary(summary: str) -> Dict[str, Any]:
-    """Transforme le résumé texte en structure de données"""
     parsed = {}
     current_key = None
-    
-    # Normalisation des clés
     key_mapping = {
         "type": ["type", "catégorie"],
         "organisateur": ["organisateur", "porteur"],
@@ -77,83 +69,42 @@ def parse_summary(summary: str) -> Dict[str, Any]:
         "durée": ["durée", "délai"],
         "localisation": ["localisation", "zone"]
     }
-    
     for line in summary.split("\n"):
         if ":" in line:
             key_part, value_part = line.split(":", 1)
             key = key_part.strip().lower()
             value = value_part.strip()
-            
-            # Recherche de clés équivalentes
             for main_key, aliases in key_mapping.items():
                 if any(alias in key for alias in aliases):
                     key = main_key
                     break
-            
             parsed[key] = value
             current_key = key
         elif current_key and line.strip():
             parsed[current_key] += " " + line.strip()
-
     return parsed
 
-def generate_embedding_mistral(text: str) -> list[float]:
-    """Génère des embeddings avec l'API Mistral"""
-    url = "https://api.mistral.ai/v1/embeddings"
-    headers = {
-        "Authorization": f"Bearer {MISTRAL_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": "mistral-embed",
-        "input": [text[:2000]]  # Limite de contexte
-    }
-    
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-        return response.json()["data"][0]["embedding"]
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=f"Erreur Mistral: {str(e)}")
-
 def format_deadline(date_str: str) -> str:
-    """Formate les dates variées en ISO 8601"""
-    formats = [
-        "%d/%m/%Y",
-        "%d-%m-%Y",
-        "%Y-%m-%d",
-        "%d %B %Y",
-        "%B %d, %Y"
-    ]
-    
+    formats = ["%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d %B %Y", "%B %d, %Y"]
     for fmt in formats:
         try:
             dt = datetime.strptime(date_str, fmt)
             return dt.isoformat()
         except ValueError:
             continue
-    
-    # Fallback: 30 jours dans le futur
     return (datetime.utcnow() + timedelta(days=30)).isoformat()
 
 @app.post("/upload-opportunity")
 async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
     try:
-        # Extraction du texte
         content = await pdf.read()
         full_text = extract_text_from_pdf_bytes(content)
-        
-        # Génération du résumé
         raw_summary = summarize_with_chatgpt(full_text)
         summary_data = parse_summary(raw_summary)
-        
-        # Génération de l'embedding
-        embedding = generate_embedding_mistral(raw_summary)
 
-        # Construction de l'enregistrement
         new_id = str(uuid4())
         now = datetime.utcnow().isoformat()
-        
+
         opportunity = {
             "id": new_id,
             "title": summary_data.get("titre", "Opportunité sans titre"),
@@ -176,14 +127,12 @@ async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
             },
             "created_at": now,
             "updated_at": now,
-            "embedding": embedding,
+            "embedding": None,
             "full_text": full_text,
             "ia_generated_at": now
         }
 
-        # Insertion dans Supabase
         response = supabase.table("opportunities").insert(opportunity).execute()
-        
         if hasattr(response, "error") and response.error:
             raise HTTPException(status_code=500, detail=response.error.message)
 
@@ -197,10 +146,7 @@ async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
         raise he
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=f"Erreur interne: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Erreur interne: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

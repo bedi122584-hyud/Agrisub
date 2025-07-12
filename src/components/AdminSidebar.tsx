@@ -7,13 +7,14 @@ import {
   LayoutDashboard,
   FileText,
   Users,
-  Bell,
   BarChart2,
   Settings,
   LogOut,
   PlusCircle,
   MessageSquare,
-  Shield
+  Shield,
+  Sparkles,
+  Bot
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -51,20 +52,20 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
   };
 
   const navItems = [
-    { icon: <LayoutDashboard />, label: "Tableau de bord", href: "/admin/dashboard" },
-    { icon: <FileText />, label: "Opportunités", href: "/admin/opportunities" },
+    { icon: <LayoutDashboard />, label: "Tableau de bord IA", href: "/admin/dashboard" },
+    { icon: <Sparkles />, label: "Opportunités IA", href: "/admin/opportunities" },
     { icon: <Users />, label: "Utilisateurs", href: "/admin/utilisateurs" },
-    { icon: <MessageSquare />, label: "Messages", href: "/admin/messages" },
-    { icon: <Shield />, label: "Modération", href: "/admin/moderation" },
-    { icon: <BarChart2 />, label: "Statistiques", href: "/admin/analytics" },
-    { icon: <Settings />, label: "Paramètres", href: "/admin/settings" },
+    { icon: <MessageSquare />, label: "Messages IA", href: "/admin/messages" },
+    { icon: <Shield />, label: "Modération IA", href: "/admin/moderation" },
+    { icon: <BarChart2 />, label: "Analyses IA", href: "/admin/analytics" },
+    { icon: <Settings />, label: "Paramètres IA", href: "/admin/settings" },
   ];
 
   return (
     <aside
       className={cn(
         "fixed md:sticky md:top-0 w-full max-w-xs md:w-64 h-full md:h-screen transform transition-transform duration-300 ease-in-out",
-        "bg-agro-dark text-white z-50 flex flex-col overflow-y-auto",
+        "bg-gradient-to-b from-[#0e291a] to-[#08170e] text-white z-50 flex flex-col overflow-y-auto",
         sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       )}
     >
@@ -72,12 +73,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
         {/* En-tête mobile */}
         <div className="md:hidden flex justify-between items-center w-full mb-6">
           <div className="flex items-center">
-            <img
-              src="/agrosub-logo.svg"
-              className="h-7 w-7"
-              alt="Logo"
-            />
-            <span className="ml-2 text-lg font-bold">Admin</span>
+            <div className="flex items-center">
+              <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-1 rounded-lg mr-1">
+                <div className="bg-[#0e291a] p-0.5 rounded-md">
+                  <div className="w-6 h-6 flex items-center justify-center rounded bg-gradient-to-r from-[#2e7d32] to-[#388e3c]">
+                    <span className="text-white font-bold text-xs">SV</span>
+                  </div>
+                </div>
+              </div>
+              <span className="text-lg font-bold text-white">SubIvoir IA</span>
+            </div>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -87,23 +92,40 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
           </button>
         </div>
 
+        {/* Logo et titre desktop */}
+        <div className="hidden md:flex items-center justify-center mb-8 mt-2">
+          <div className="flex items-center">
+            <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] p-1.5 rounded-lg mr-2">
+              <div className="bg-[#0e291a] p-1 rounded-md">
+                <div className="w-10 h-10 flex items-center justify-center rounded bg-gradient-to-r from-[#2e7d32] to-[#388e3c]">
+                  <span className="text-white font-bold">SV</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <span className="text-xl font-bold text-white">SubIvoir</span>
+              <p className="text-xs text-[#81c784]">Powered by AI</p>
+            </div>
+          </div>
+        </div>
+
         {/* Section profil */}
-        <div className="mb-6 p-3 bg-agro-dark/50 rounded-lg border border-agro-light/20">
+        <div className="mb-6 p-3 bg-[#1a3c29] rounded-lg border border-[#2e7d32]/30">
           <div className="flex items-center mb-3">
-            <div className="w-9 h-9 rounded-full bg-agro-light text-agro-dark flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-r from-[#2e7d32] to-[#388e3c] text-white flex items-center justify-center font-bold">
               {admin?.email?.substring(0, 1).toUpperCase() || 'A'}
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium truncate">{admin?.email || 'Administrateur'}</h3>
-              <p className="text-xs text-gray-400">Compte Admin</p>
+              <h3 className="text-sm font-medium truncate text-white">{admin?.email || 'Administrateur IA'}</h3>
+              <p className="text-xs text-[#a5d6a7]">Accès Premium</p>
             </div>
           </div>
           <Link
             to="/admin/opportunites"
-            className="flex items-center text-sm text-agro-light hover:text-white transition-colors"
+            className="flex items-center text-sm text-[#a5d6a7] hover:text-white transition-colors"
           >
             <PlusCircle className="h-4 w-4 mr-2" />
-            <span className="truncate">Gérer les opportunités</span>
+            <span className="truncate">Créer avec IA</span>
           </Link>
         </div>
 
@@ -116,12 +138,32 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
               onClick={() => setSidebarOpen(false)}
               className={cn(
                 "flex items-center py-2 md:py-3 px-3 rounded-lg text-sm",
-                "hover:bg-white/5 transition-colors truncate",
-                location.pathname === item.href && "bg-white/10"
+                "hover:bg-[#2e7d32]/30 transition-colors truncate group",
+                location.pathname === item.href && "bg-[#2e7d32]/20"
               )}
             >
-              {React.cloneElement(item.icon, { className: "h-5 w-5 md:h-6 md:w-6" })}
-              <span className="ml-2 md:ml-3">{item.label}</span>
+              {React.cloneElement(item.icon, { 
+                className: cn(
+                  "h-5 w-5 md:h-6 md:w-6 transition-colors",
+                  location.pathname === item.href 
+                    ? "text-white" 
+                    : "text-[#a5d6a7] group-hover:text-white"
+                ) 
+              })}
+              <span className={cn(
+                "ml-2 md:ml-3 transition-colors",
+                location.pathname === item.href 
+                  ? "text-white font-medium" 
+                  : "text-[#a5d6a7] group-hover:text-white"
+              )}>
+                {item.label}
+              </span>
+              
+              {item.label.includes("IA") && (
+                <span className="ml-auto bg-[#388e3c] text-white text-xs px-1.5 py-0.5 rounded">
+                  AI
+                </span>
+              )}
             </Link>
           ))}
         </nav>
@@ -130,7 +172,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
         <div className="mt-auto pt-4">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center py-2 md:py-3 px-3 rounded-lg text-sm text-red-300 hover:bg-red-900/20"
+            className="w-full flex items-center py-2 md:py-3 px-3 rounded-lg text-sm text-[#ef9a9a] hover:bg-red-900/20 hover:text-white transition-colors"
           >
             <LogOut className="h-5 w-5 md:h-6 md:w-6" />
             <span className="ml-2 md:ml-3">Se déconnecter</span>

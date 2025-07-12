@@ -55,7 +55,9 @@ const AdminOpportunities = () => {
 
   return (
     <div className="flex min-h-screen">
-      <AdminSidebar />
+      <AdminSidebar sidebarOpen={false} setSidebarOpen={function (open: boolean): void {
+        throw new Error('Function not implemented.');
+      } } />
       <div className="flex-1 p-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Gestion des Opportunités</h1>

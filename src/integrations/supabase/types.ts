@@ -280,6 +280,7 @@ export type Database = {
 
       opportunities: {
         Row: {
+          ai_generated: any;
           id: string;
           title: string;
           type: string;

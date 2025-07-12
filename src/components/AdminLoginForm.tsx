@@ -28,7 +28,6 @@ const AdminLoginForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // 1️⃣ Authentification Supabase native
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -36,7 +35,7 @@ const AdminLoginForm: React.FC = () => {
       if (error) throw error;
       if (!data.user) throw new Error('Aucun utilisateur trouvé');
 
-      // 2️⃣ Vérification des droits admin
+      // Vérification des droits admin
       const { data: adminData, error: adminError } = await supabase
         .from('admins')
         .select('id')
@@ -44,21 +43,17 @@ const AdminLoginForm: React.FC = () => {
         .single();
 
       if (adminError || !adminData) {
-        // Si ce n’est pas un admin, on déconnecte immédiatement
         await supabase.auth.signOut();
         throw new Error('Accès réservé aux administrateurs autorisés');
       }
 
-      // 3️⃣ Toast de succès
       toast({
         title: 'Connexion réussie 🎉',
-        description: `Bienvenue, ${data.user.email}`,
+        description: `Bienvenue sur SubIvoir, ${data.user.email}`,
       });
 
-      // 4️⃣ Navigation vers le dashboard admin
       navigate('/admin/dashboard');
     } catch (err: any) {
-      // Vide le champ mot de passe pour plus de sécurité UX
       setPassword('');
       toast({
         variant: 'destructive',
@@ -71,29 +66,50 @@ const AdminLoginForm: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Administration AgroSub</CardTitle>
-        <CardDescription>
-          Connectez-vous avec vos identifiants administrateur
+    <Card className="w-full max-w-md mx-auto border-0 shadow-2xl rounded-2xl overflow-hidden bg-gradient-to-br from-[#e8f5e9] to-[#c8e6c9] dark:from-[#0d2819] dark:to-[#0a1f12]">
+      <div className="bg-gradient-to-r from-[#2e7d32] to-[#388e3c] h-2 w-full"></div>
+      
+      <CardHeader className="space-y-1 pt-6">
+        <CardTitle className="text-2xl text-center font-bold text-[#1b5e20] dark:text-[#81c784]">
+          Administration SubIvoir
+        </CardTitle>
+        <CardDescription className="text-center text-[#2e7d32] dark:text-[#a5d6a7]">
+          Accès sécurisé à l'interface de gestion
         </CardDescription>
       </CardHeader>
+      
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email administratif</Label>
+        <CardContent className="space-y-4 px-6 pb-4">
+          <div className="space-y-3">
+            <Label htmlFor="email" className="text-[#1b5e20] dark:text-[#81c784]">
+              Email administratif
+            </Label>
             <Input
               id="email"
               type="email"
-              placeholder="admin@agrosub.ci"
+              placeholder="admin@subivoir.ci"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
               required
+              className="bg-white/90 dark:bg-[#0e291a] border-[#a5d6a7] dark:border-[#2e7d32] focus:ring-2 focus:ring-[#2e7d32]"
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Mot de passe</Label>
+          
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="password" className="text-[#1b5e20] dark:text-[#81c784]">
+                Mot de passe
+              </Label>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-xs text-[#2e7d32] dark:text-[#a5d6a7] hover:underline"
+              >
+                {showPassword ? 'Cacher' : 'Afficher'}
+              </button>
+            </div>
+            
             <div className="relative">
               <Input
                 id="password"
@@ -103,10 +119,11 @@ const AdminLoginForm: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
+                className="bg-white/90 dark:bg-[#0e291a] border-[#a5d6a7] dark:border-[#2e7d32] focus:ring-2 focus:ring-[#2e7d32] pr-10"
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2e7d32] dark:text-[#a5d6a7] hover:text-[#1b5e20] dark:hover:text-white"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Cacher le mot de passe' : 'Afficher le mot de passe'}
               >
@@ -115,16 +132,17 @@ const AdminLoginForm: React.FC = () => {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
+        
+        <CardFooter className="px-6 pb-6">
           <Button
             type="submit"
-            className="w-full bg-[#2E7D32] hover:bg-[#1B5E20] text-white"
+            className="w-full bg-gradient-to-r from-[#2e7d32] to-[#388e3c] hover:from-[#1b5e20] hover:to-[#2e7d32] text-white font-bold py-5 rounded-lg shadow-md transition-all duration-300"
             disabled={isLoading}
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Connexion...
+                Connexion en cours...
               </>
             ) : (
               'Accéder au tableau de bord'
@@ -132,6 +150,12 @@ const AdminLoginForm: React.FC = () => {
           </Button>
         </CardFooter>
       </form>
+      
+      <div className="px-6 pb-4 text-center">
+        <p className="text-xs text-[#4caf50] dark:text-[#a5d6a7]">
+          ⚠️ Cet accès est strictement réservé au personnel autorisé
+        </p>
+      </div>
     </Card>
   );
 };
