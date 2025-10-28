@@ -100,7 +100,7 @@ export default function OpportunitiesChat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer REMOVED",
+          Authorization: "Bearer ***REMOVED***REMOVED",
         },
         body: JSON.stringify({
           model: "gpt-4o",
