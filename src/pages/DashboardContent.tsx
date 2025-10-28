@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
+import { OpenAI } from 'openai';
 
 interface Profile {
   id: string;
@@ -82,7 +83,9 @@ export default function DashboardContent() {
   const [upcomingDeadlines, setUpcomingDeadlines] = useState<Opportunity[]>([]);
 
   // OpenAI key (À remplacer par un appel backend en production)
-  const OPENAI_API_KEY = "REMOVED";
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, // caché dans .env
+});
 
   useEffect(() => {
     async function fetchRecs() {
@@ -128,7 +131,7 @@ export default function DashboardContent() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${OPENAI_API_KEY}`
+            Authorization: `Bearer ${openai.apiKey}`,
           },
           body: JSON.stringify({
             model: 'gpt-3.5-turbo',
