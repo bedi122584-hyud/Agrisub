@@ -110,7 +110,7 @@ const Opportunities = () => {
   return (
     <>
       <Helmet>
-        <title>Opportunités Agricoles | SubIvoir</title>
+        <title>Opportunités Agricoles | Agrosub</title>
         <meta name="description" content="Découvrez toutes les opportunités de financement pour votre projet agricole en Côte d'Ivoire" />
       </Helmet>
 

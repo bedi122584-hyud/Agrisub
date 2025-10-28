@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>SubIvoir | Financements et opportunités agricoles en Côte d'Ivoire</title>
+        <title>Agrosub | Financements et opportunités agricoles en Côte d'Ivoire</title>
         <meta name="description" content="Trouvez des financements, subventions et appels à projets pour votre activité agricole en Côte d'Ivoire. Une plateforme pour tous les acteurs du secteur." />
       </Helmet>
       

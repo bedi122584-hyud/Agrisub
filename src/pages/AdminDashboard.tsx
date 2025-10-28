@@ -148,8 +148,8 @@ const AdminDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Tableau de bord IA | SubIvoir</title>
-        <meta name="description" content="Gestion administrative intelligente de la plateforme SubIvoir" />
+        <title>Tableau de bord IA | Agrosub</title>
+        <meta name="description" content="Gestion administrative intelligente de la plateforme Agrosub" />
       </Helmet>
 
       <div className="flex min-h-screen bg-[#F5F5DC]">
@@ -175,7 +175,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
-                SubIvoir
+                Agrosub
               </span>
             </div>
           </div>

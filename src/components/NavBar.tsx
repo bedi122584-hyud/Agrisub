@@ -73,7 +73,7 @@ const NavBar: React.FC = () => {
                 </div>
               </div>
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                SubIvoir
+                Agrosub
               </span>
             </div>
           </Link>

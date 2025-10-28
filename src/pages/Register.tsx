@@ -9,8 +9,8 @@ const Register = () => {
   return (
     <>
       <Helmet>
-        <title>Inscription | SubIvoir</title>
-        <meta name="description" content="Créez un compte SubIvoir pour accéder aux dispositifs de financement agricole en Côte d'Ivoire." />
+        <title>Inscription | Agrosub</title>
+        <meta name="description" content="Créez un compte Agrosub pour accéder aux dispositifs de financement agricole en Côte d'Ivoire." />
       </Helmet>
       
       <div className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted/30">
@@ -39,7 +39,7 @@ const Register = () => {
                     </div>
                   </motion.div>
                   <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                    Rejoignez SubIvoir
+                    Rejoignez Agrosub
                   </h1>
                   <p className="text-muted-foreground mt-2">
                     Créez votre compte pour accéder aux financements

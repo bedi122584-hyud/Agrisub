@@ -26,7 +26,7 @@ export default {
         heading: ['Montserrat', 'sans-serif'],
       },
       colors: {
-        subivoir: {
+        Agrosub: {
           primary: "#2E7D32",    // Vert foncé principal
           secondary: "#81C784",  // Vert clair secondaire
           accent: "#8B4513",     // Brun agricole

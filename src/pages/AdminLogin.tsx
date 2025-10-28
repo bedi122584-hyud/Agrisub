@@ -23,8 +23,8 @@ const AdminLogin = () => {
   return (
     <>
       <Helmet>
-        <title>Administration | SubIvoir</title>
-        <meta name="description" content="Accès à l'espace administrateur SubIvoir" />
+        <title>Administration | Agrosub</title>
+        <meta name="description" content="Accès à l'espace administrateur Agrosub" />
       </Helmet>
 
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e6f7ed] to-[#d0f0e0] dark:from-[#0a1f12] dark:to-[#08170e] p-4">
@@ -42,7 +42,7 @@ const AdminLogin = () => {
                   </div>
                 </div>
                 <span className="text-3xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
-                  SubIvoir
+                  Agrosub
                 </span>
               </div>
             </div>

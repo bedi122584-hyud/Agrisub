@@ -156,7 +156,7 @@ const AdminOpportunities: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Gestion Intelligente des Opportunités | SubIvoir</title>
+        <title>Gestion Intelligente des Opportunités | Agrosub</title>
         <meta name="description" content="Plateforme de gestion des opportunités agricoles avec IA" />
       </Helmet>
 
@@ -183,7 +183,7 @@ const AdminOpportunities: React.FC = () => {
                 </div>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
-                SubIvoir
+                Agrosub
               </span>
             </div>
           </div>

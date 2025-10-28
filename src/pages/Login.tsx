@@ -9,8 +9,8 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Connexion | SubIvoir</title>
-        <meta name="description" content="Connectez-vous à votre compte SubIvoir pour accéder aux financements agricoles en Côte d'Ivoire." />
+        <title>Connexion | Agrosub</title>
+        <meta name="description" content="Connectez-vous à votre compte Agrosub pour accéder aux financements agricoles en Côte d'Ivoire." />
       </Helmet>
       
       <div className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted/30">
@@ -39,7 +39,7 @@ const Login = () => {
                     </div>
                   </motion.div>
                   <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                    Connexion à SubIvoir
+                    Connexion à Agrosub
                   </h1>
                   <p className="text-muted-foreground mt-2">
                     Espace personnel

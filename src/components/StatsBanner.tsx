@@ -58,7 +58,7 @@ const StatsBanner: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              L'impact <span className="text-secondary">SubIvoir</span> en chiffres
+              L'impact <span className="text-secondary">Agrosub</span> en chiffres
             </h2>
             <p className="text-lg text-primary-foreground/80 max-w-3xl mx-auto">
               Notre plateforme transforme l'écosystème des financements en Côte d'Ivoire

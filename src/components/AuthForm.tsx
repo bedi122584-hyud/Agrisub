@@ -65,7 +65,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
 
         toast({
           title: "Connexion réussie",
-          description: `Bienvenue ${profile.name} sur Subivoir`
+          description: `Bienvenue ${profile.name} sur Agrosub`
         });
 
         navigate('/tableau-de-bord');
@@ -119,12 +119,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   };
   
   return (
-    <Card className="w-full border border-subivoir-light/30 shadow-subivoir-light/20">
+    <Card className="w-full border border-Agrosub-light/30 shadow-Agrosub-light/20">
       <CardHeader className="text-center space-y-2">
-        <CardTitle className="text-subivoir-dark text-2xl font-bold">
-          {mode === 'login' ? 'Connexion à SubIvoir' : 'Création de compte'}
+        <CardTitle className="text-Agrosub-dark text-2xl font-bold">
+          {mode === 'login' ? 'Connexion à Agrosub' : 'Création de compte'}
         </CardTitle>
-        <CardDescription className="text-subivoir-muted text-base">
+        <CardDescription className="text-Agrosub-muted text-base">
           {mode === 'login' 
             ? 'Accédez à votre espace de gestion des financements agricoles' 
             : 'Rejoignez la plateforme officielle des financements agricoles'}
@@ -134,7 +134,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         <CardContent className="space-y-4">
           {mode === 'register' && (
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-subivoir-dark">Nom complet</Label>
+              <Label htmlFor="name" className="text-Agrosub-dark">Nom complet</Label>
               <Input 
                 id="name" 
                 type="text" 
@@ -142,13 +142,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="border-subivoir-light/50 focus:border-subivoir-primary"
+                className="border-Agrosub-light/50 focus:border-Agrosub-primary"
               />
             </div>
           )}
           
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-subivoir-dark">Email institutionnel</Label>
+            <Label htmlFor="email" className="text-Agrosub-dark">Email institutionnel</Label>
             <Input 
               id="email" 
               type="email" 
@@ -156,12 +156,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border-subivoir-light/50 focus:border-subivoir-primary"
+              className="border-Agrosub-light/50 focus:border-Agrosub-primary"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-subivoir-dark">Mot de passe</Label>
+            <Label htmlFor="password" className="text-Agrosub-dark">Mot de passe</Label>
             <div className="relative">
               <Input 
                 id="password" 
@@ -170,11 +170,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="border-subivoir-light/50 focus:border-subivoir-primary"
+                className="border-Agrosub-light/50 focus:border-Agrosub-primary"
               />
               <button 
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-subivoir-muted hover:text-subivoir-dark"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-Agrosub-muted hover:text-Agrosub-dark"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -184,7 +184,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           
           {mode === 'register' && (
             <div className="space-y-2">
-              <Label className="text-subivoir-dark">Type de profil</Label>
+              <Label className="text-Agrosub-dark">Type de profil</Label>
               <RadioGroup 
                 value={profileType} 
                 onValueChange={setProfileType}
@@ -196,18 +196,18 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                     key={type.id} 
                     className={`flex items-center space-x-3 p-3 rounded-lg border ${
                       profileType === type.id 
-                        ? 'border-subivoir-primary bg-subivoir-primary/10' 
-                        : 'border-subivoir-light/30 hover:border-subivoir-light/50'
+                        ? 'border-Agrosub-primary bg-Agrosub-primary/10' 
+                        : 'border-Agrosub-light/30 hover:border-Agrosub-light/50'
                     }`}
                   >
                     <RadioGroupItem 
                       value={type.id} 
                       id={`profile-${type.id}`} 
-                      className="text-subivoir-primary border-subivoir-light/50"
+                      className="text-Agrosub-primary border-Agrosub-light/50"
                     />
                     <Label 
                       htmlFor={`profile-${type.id}`} 
-                      className="cursor-pointer text-subivoir-dark font-normal"
+                      className="cursor-pointer text-Agrosub-dark font-normal"
                     >
                       {type.label}
                     </Label>
@@ -220,7 +220,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         <CardFooter className="flex flex-col">
           <Button 
             type="submit" 
-            className="w-full bg-subivoir-primary hover:bg-subivoir-dark"
+            className="w-full bg-Agrosub-primary hover:bg-Agrosub-dark"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -233,14 +233,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             )}
           </Button>
           
-          <div className="mt-4 text-center text-sm text-subivoir-muted">
+          <div className="mt-4 text-center text-sm text-Agrosub-muted">
             {mode === 'login' ? (
               <>
                 <p>
                   Pas encore de compte ?{' '}
                   <Link 
                     to="/inscription" 
-                    className="text-subivoir-primary hover:underline font-medium"
+                    className="text-Agrosub-primary hover:underline font-medium"
                   >
                     S'inscrire
                   </Link>
@@ -248,7 +248,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 <p className="mt-2">
                   <Link 
                     to="/mot-de-passe-oublie" 
-                    className="text-subivoir-primary hover:underline"
+                    className="text-Agrosub-primary hover:underline"
                   >
                     Mot de passe oublié ?
                   </Link>
@@ -259,7 +259,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 Déjà inscrit ?{' '}
                 <Link 
                   to="/connexion" 
-                  className="text-subivoir-primary hover:underline font-medium"
+                  className="text-Agrosub-primary hover:underline font-medium"
                 >
                   Se connecter
                 </Link>
@@ -270,10 +270,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           <div className="mt-6 w-full">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-subivoir-light/30"></div>
+                <div className="w-full border-t border-Agrosub-light/30"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-subivoir-muted">Ou continuer avec</span>
+                <span className="px-2 bg-white text-Agrosub-muted">Ou continuer avec</span>
               </div>
             </div>
             
@@ -282,7 +282,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 variant="outline" 
                 type="button" 
                 disabled={isLoading}
-                className="border-subivoir-light/50 hover:border-subivoir-light/70 text-subivoir-dark"
+                className="border-Agrosub-light/50 hover:border-Agrosub-light/70 text-Agrosub-dark"
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path
@@ -308,7 +308,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 variant="outline" 
                 type="button" 
                 disabled={isLoading}
-                className="border-subivoir-light/50 hover:border-subivoir-light/70 text-subivoir-dark"
+                className="border-Agrosub-light/50 hover:border-Agrosub-light/70 text-Agrosub-dark"
               >
                 <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path

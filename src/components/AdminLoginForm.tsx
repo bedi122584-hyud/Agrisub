@@ -49,7 +49,7 @@ const AdminLoginForm: React.FC = () => {
 
       toast({
         title: 'Connexion réussie 🎉',
-        description: `Bienvenue sur SubIvoir, ${data.user.email}`,
+        description: `Bienvenue sur Agrosub, ${data.user.email}`,
       });
 
       navigate('/admin/dashboard');
@@ -71,7 +71,7 @@ const AdminLoginForm: React.FC = () => {
       
       <CardHeader className="space-y-1 pt-6">
         <CardTitle className="text-2xl text-center font-bold text-[#1b5e20] dark:text-[#81c784]">
-          Administration SubIvoir
+          Administration Agrosub
         </CardTitle>
         <CardDescription className="text-center text-[#2e7d32] dark:text-[#a5d6a7]">
           Accès sécurisé à l'interface de gestion
@@ -87,7 +87,7 @@ const AdminLoginForm: React.FC = () => {
             <Input
               id="email"
               type="email"
-              placeholder="admin@subivoir.ci"
+              placeholder="admin@Agrosub.ci"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"

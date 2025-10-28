@@ -178,7 +178,7 @@ const EditOpportunity: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Édition Intelligente | SubIvoir</title>
+        <title>Édition Intelligente | Agrosub</title>
         <meta name="description" content="Éditez les opportunités avec l'aide de l'intelligence artificielle" />
       </Helmet>
       
@@ -204,7 +204,7 @@ const EditOpportunity: React.FC = () => {
                 </div>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-[#2e7d32] to-[#4caf50] bg-clip-text text-transparent">
-                SubIvoir
+                Agrosub
               </span>
             </div>
           </div>

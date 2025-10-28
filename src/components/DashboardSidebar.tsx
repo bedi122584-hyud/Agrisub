@@ -249,7 +249,7 @@ const DashboardSidebar: React.FC = () => {
   return (
     <aside className="w-64 bg-background border-r border-border h-screen sticky top-0 overflow-y-auto">
       <div className="px-4 py-6">
-        {/* Logo SubIvoir */}
+        {/* Logo Agrosub */}
         <motion.div 
           className="flex items-center mb-8"
           initial={{ opacity: 0, x: -20 }}
@@ -269,7 +269,7 @@ const DashboardSidebar: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            SubIvoir
+            Agrosub
           </motion.span>
         </motion.div>
 

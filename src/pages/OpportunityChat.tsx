@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Bot, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { OpenAI } from "openai";
 
-const OPENAI_API_KEY = "REMOVED";
-
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+});
 type Message = {
   role: "user" | "assistant";
   content: string;
@@ -64,7 +66,7 @@ const OpportunityChat: React.FC<OpportunityChatProps> = ({
     // Construction du prompt système en incluant le profil
     const profileLabel = profileLabels[profileType] || profileType;
     const systemContent = 
-      `Tu es un assistant expert pour la plateforme SubIvoir. ` +
+      `Tu es un assistant expert pour la plateforme Agrosub. ` +
       `L'utilisateur a le profil : ${profileLabel}. ` +
       `Le profil est ${profileCompleted ? "complet" : "incomplet"}. ` +
       `Réponds uniquement en te basant sur le résumé suivant de l'opportunité agricole :\n\n` +
@@ -75,7 +77,7 @@ const OpportunityChat: React.FC<OpportunityChatProps> = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          Authorization: `Bearer ${openai.apiKey}`,
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
@@ -162,7 +164,7 @@ const OpportunityChat: React.FC<OpportunityChatProps> = ({
                   <User className="h-4 w-4 text-primary-foreground" />
                 )}
                 <span className="text-xs opacity-80">
-                  {msg.role === "assistant" ? "Assistant SubIvoir" : "Vous"} • {formatTime(msg.timestamp)}
+                  {msg.role === "assistant" ? "Assistant Agrosub" : "Vous"} • {formatTime(msg.timestamp)}
                 </span>
               </div>
               <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -179,7 +181,7 @@ const OpportunityChat: React.FC<OpportunityChatProps> = ({
             <div className="bg-background border border-border p-4 rounded-2xl rounded-bl-none max-w-[80%]">
               <div className="flex items-center gap-2">
                 <Bot className="h-4 w-4 text-primary" />
-                <span className="text-xs text-muted-foreground">Assistant SubIvoir</span>
+                <span className="text-xs text-muted-foreground">Assistant Agrosub</span>
                 <Loader2 className="h-4 w-4 animate-spin text-primary" />
               </div>
             </div>

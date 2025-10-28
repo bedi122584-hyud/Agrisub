@@ -49,7 +49,7 @@ const ProfileFeatures: React.FC = () => {
               Pour qui ?
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              SubIvoir s'adapte à <span className="text-primary">votre profil</span>
+              Agrosub s'adapte à <span className="text-primary">votre profil</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Que vous soyez porteur de projet, institution publique ou investisseur, notre plateforme est conçue pour répondre à vos besoins spécifiques.

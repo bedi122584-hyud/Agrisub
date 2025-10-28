@@ -8,7 +8,7 @@ export const config = {
 };
 
 const openai = new OpenAI({
-  apiKey: "REMOVED",
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
 });
 
 const parseForm = (req: NextApiRequest) => new Promise<{ files: formidable.Files }>((resolve, reject) => {

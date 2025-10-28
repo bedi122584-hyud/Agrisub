@@ -223,7 +223,7 @@ export default function OpportunitiesChat() {
             </div>
           </div>
           <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-            Assistant SubIvoir
+            Assistant Agrosub
           </h1>
         </div>
         <p className="text-muted-foreground">
@@ -275,7 +275,7 @@ export default function OpportunitiesChat() {
               <div className="text-4xl">💬</div>
             </div>
             <h3 className="text-xl font-medium text-foreground mb-2">Commencez la conversation</h3>
-            <p>Posez votre première question à l'assistant SubIvoir</p>
+            <p>Posez votre première question à l'assistant Agrosub</p>
             <p className="mt-2 text-sm">Ex: "Quelles opportunités correspondent à mon profil?"</p>
           </div>
         )}

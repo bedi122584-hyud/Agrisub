@@ -58,7 +58,7 @@ const SettingsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Paramètres de la coopérative | SubIvoir</title>
+        <title>Paramètres de la coopérative | Agrosub</title>
       </Helmet>
       
       <motion.div 

@@ -45,7 +45,7 @@ const CallToAction: React.FC = () => {
               transition={{ delay: 0.4 }}
             >
               <p className="text-lg md:text-xl mb-8 text-muted-foreground">
-                Rejoignez la communauté SubIvoir et accédez à des financements sur mesure pour 
+                Rejoignez la communauté Agrosub et accédez à des financements sur mesure pour 
                 transformer votre vision en réalité. Notre plateforme intelligente vous guide 
                 pas à pas vers le succès.
               </p>

@@ -149,7 +149,7 @@ const HeroBanner: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              SubIvoir connecte les porteurs de projets aux financements publics et privés pour dynamiser l'agriculture ivoirienne.
+              Agrosub connecte les porteurs de projets aux financements publics et privés pour dynamiser l'agriculture ivoirienne.
             </motion.p>
             
             <motion.div 

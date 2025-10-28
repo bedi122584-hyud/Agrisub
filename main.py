@@ -7,8 +7,14 @@ from uuid import uuid4
 from typing import Any, Dict
 from datetime import datetime, timedelta
 import traceback
+import os  # ✅ pour charger les variables d’environnement
+from dotenv import load_dotenv  # ✅ si tu veux charger .env automatiquement
+
+# === Charger les variables d’environnement ===
+load_dotenv()
 
 app = FastAPI()
+
 # === CORS (si ton frontend tourne sur d’autres ports) ===
 app.add_middleware(
     CORSMiddleware,
@@ -18,17 +24,22 @@ app.add_middleware(
 )
 
 # === CONFIGURATION ===
-OPENAI_API_KEY   = "REMOVED"
-SUPABASE_URL     = "https://gwznesrrbmgmymulzbqd.supabase.co"
-SUPABASE_KEY     = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3em5lc3JyYm1nbXltdWx6YnFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0ODkyMzYsImV4cCI6MjA2MzA2NTIzNn0.IXAXvaGrGhSBi6dnoVYBD-3udtnw9PaWhuEOp2lwbAY"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+if not OPENAI_API_KEY or not SUPABASE_URL or not SUPABASE_KEY:
+    raise RuntimeError("Les variables d'environnement OPENAI_API_KEY, SUPABASE_URL et SUPABASE_KEY doivent être définies")
 
 # Initialisation des clients
 openai.api_key = OPENAI_API_KEY
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
 def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     return "\n".join(page.get_text() for page in doc)
+
 
 def summarize_with_chatgpt(text: str) -> str:
     system_prompt = (
@@ -52,12 +63,13 @@ def summarize_with_chatgpt(text: str) -> str:
             temperature=0.2,
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": text[:6000]}
-            ]
+                {"role": "user", "content": text[:6000]},
+            ],
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur OpenAI: {str(e)}")
+
 
 def parse_summary(summary: str) -> Dict[str, Any]:
     parsed = {}
@@ -67,7 +79,7 @@ def parse_summary(summary: str) -> Dict[str, Any]:
         "organisateur": ["organisateur", "porteur"],
         "date limite": ["date limite", "échéance"],
         "durée": ["durée", "délai"],
-        "localisation": ["localisation", "zone"]
+        "localisation": ["localisation", "zone"],
     }
     for line in summary.split("\n"):
         if ":" in line:
@@ -84,6 +96,7 @@ def parse_summary(summary: str) -> Dict[str, Any]:
             parsed[current_key] += " " + line.strip()
     return parsed
 
+
 def format_deadline(date_str: str) -> str:
     formats = ["%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d %B %Y", "%B %d, %Y"]
     for fmt in formats:
@@ -93,6 +106,7 @@ def format_deadline(date_str: str) -> str:
         except ValueError:
             continue
     return (datetime.utcnow() + timedelta(days=30)).isoformat()
+
 
 @app.post("/upload-opportunity")
 async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
@@ -123,13 +137,13 @@ async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
                 "sector": summary_data.get("secteur", "Agriculture générale"),
                 "location": summary_data.get("localisation", "National"),
                 "montant": summary_data.get("montant", "Non spécifié"),
-                "duree": summary_data.get("durée", "Non spécifié")
+                "duree": summary_data.get("durée", "Non spécifié"),
             },
             "created_at": now,
             "updated_at": now,
             "embedding": None,
             "full_text": full_text,
-            "ia_generated_at": now
+            "ia_generated_at": now,
         }
 
         response = supabase.table("opportunities").insert(opportunity).execute()
@@ -139,7 +153,7 @@ async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
         return {
             "id": new_id,
             "message": "Opportunité créée avec succès",
-            "data": opportunity
+            "data": opportunity,
         }
 
     except HTTPException as he:
@@ -148,6 +162,8 @@ async def upload_opportunity(pdf: UploadFile = File(...)) -> Dict[str, Any]:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Erreur interne: {str(e)}")
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

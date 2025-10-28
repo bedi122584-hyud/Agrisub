@@ -10,8 +10,8 @@ const NotFound = () => {
   return (
     <>
       <Helmet>
-        <title>Page non trouvée | SubIvoir</title>
-        <meta name="description" content="La page que vous recherchez n'existe pas ou a été déplacée sur le portail SubIvoir." />
+        <title>Page non trouvée | Agrosub</title>
+        <meta name="description" content="La page que vous recherchez n'existe pas ou a été déplacée sur le portail Agrosub." />
       </Helmet>
 
       <div className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted/20">

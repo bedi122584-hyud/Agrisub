@@ -110,7 +110,7 @@
 }
 
 @layer components {
-  .subivoir-container {
+  .Agrosub-container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -118,31 +118,31 @@
     padding-right: 1rem;
   }
   @media (min-width: 640px) {
-    .subivoir-container {
+    .Agrosub-container {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
   @media (min-width: 1024px) {
-    .subivoir-container {
+    .Agrosub-container {
       padding-left: 2rem;
       padding-right: 2rem;
     }
   }
 
-  .subivoir-card {
+  .Agrosub-card {
     background-color: #fff;
     border-radius: 0.5rem;
     box-shadow: 0 1px 6px rgba(0,0,0,0.1);
     padding: 1.5rem;
-    border: 1px solid #e5e7eb; /* Replace with your subivoir-light color */
+    border: 1px solid #e5e7eb; /* Replace with your Agrosub-light color */
     transition: box-shadow 0.3s;
   }
-  .subivoir-card:hover {
+  .Agrosub-card:hover {
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
 
-  .subivoir-button {
+  .Agrosub-button {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     padding-top: 0.75rem;
@@ -153,24 +153,24 @@
     transition-duration: 300ms;
   }
 
-  .subivoir-button-primary {
-    background-color: var(--subivoir-primary, #2e7d32);
+  .Agrosub-button-primary {
+    background-color: var(--Agrosub-primary, #2e7d32);
     color: #fff;
   }
-  .subivoir-button-primary:hover {
-    background-color: var(--subivoir-dark, #1b5e20);
+  .Agrosub-button-primary:hover {
+    background-color: var(--Agrosub-dark, #1b5e20);
   }
 
-  .subivoir-button-secondary {
-    background-color: var(--subivoir-secondary, #81c784);
-    color: var(--subivoir-dark, #1b5e20);
+  .Agrosub-button-secondary {
+    background-color: var(--Agrosub-secondary, #81c784);
+    color: var(--Agrosub-dark, #1b5e20);
   }
-  .subivoir-button-secondary:hover {
-    background-color: var(--subivoir-light, #c8e6c9);
+  .Agrosub-button-secondary:hover {
+    background-color: var(--Agrosub-light, #c8e6c9);
   }
 
-  .subivoir-input {
-    border: 1px solid var(--subivoir-light, #c8e6c9);
+  .Agrosub-input {
+    border: 1px solid var(--Agrosub-light, #c8e6c9);
     border-radius: 0.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -178,17 +178,17 @@
     padding-bottom: 0.5rem;
     outline: none;
   }
-  .subivoir-input:focus {
+  .Agrosub-input:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--subivoir-primary, #2e7d32);
+    box-shadow: 0 0 0 2px var(--Agrosub-primary, #2e7d32);
   }
 
-  .subivoir-section {
+  .Agrosub-section {
     padding-top: 3rem;
     padding-bottom: 3rem;
   }
   @media (min-width: 768px) {
-    .subivoir-section {
+    .Agrosub-section {
       padding-top: 5rem;
       padding-bottom: 5rem;
     }

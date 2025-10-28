@@ -81,7 +81,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
                   </div>
                 </div>
               </div>
-              <span className="text-lg font-bold text-white">SubIvoir IA</span>
+              <span className="text-lg font-bold text-white">Agrosub IA</span>
             </div>
           </div>
           <button
@@ -103,7 +103,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ sidebarOpen, setSidebarOpen
               </div>
             </div>
             <div>
-              <span className="text-xl font-bold text-white">SubIvoir</span>
+              <span className="text-xl font-bold text-white">Agrosub</span>
               <p className="text-xs text-[#81c784]">Powered by AI</p>
             </div>
           </div>

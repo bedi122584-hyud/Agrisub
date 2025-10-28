@@ -81,7 +81,7 @@ const FeaturedProjects: React.FC = () => {
               Projets <span className="text-primary">phares</span> financés
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Découvrez des initiatives qui ont transformé leur secteur grâce à SubIvoir
+              Découvrez des initiatives qui ont transformé leur secteur grâce à Agrosub
             </p>
           </motion.div>
         </div>

@@ -57,7 +57,7 @@ const InvestorSettingsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Paramètres investisseur | SubIvoir</title>
+        <title>Paramètres investisseur | Agrosub</title>
       </Helmet>
       
       <motion.div 

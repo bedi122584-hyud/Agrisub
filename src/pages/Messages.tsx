@@ -9,8 +9,8 @@ export default function Messages() {
   return (
     <>
       <Helmet>
-        <title>Messagerie | SubIvoir</title>
-        <meta name="description" content="Discutez avec l'assistant SubIvoir pour découvrir les opportunités de financement agricole en Côte d'Ivoire." />
+        <title>Messagerie | Agrosub</title>
+        <meta name="description" content="Discutez avec l'assistant Agrosub pour découvrir les opportunités de financement agricole en Côte d'Ivoire." />
       </Helmet>
       
       <div className="flex min-h-screen bg-gradient-to-b from-background to-muted/20">

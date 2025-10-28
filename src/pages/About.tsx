@@ -71,8 +71,8 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>À propos de SubIvoir | Portail officiel des financements agricoles</title>
-        <meta name="description" content="Découvrez la mission et l'équipe derrière SubIvoir, la plateforme gouvernementale de financements agricoles en Côte d'Ivoire." />
+        <title>À propos de Agrosub | Portail officiel des financements agricoles</title>
+        <meta name="description" content="Découvrez la mission et l'équipe derrière Agrosub, la plateforme gouvernementale de financements agricoles en Côte d'Ivoire." />
       </Helmet>
       
       <div className="flex flex-col min-h-screen">
@@ -88,15 +88,15 @@ const About = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 inline-block bg-subivoir-dark/80 text-white px-6 py-3 rounded-lg shadow-lg"
+                  className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 inline-block bg-Agrosub-dark/80 text-white px-6 py-3 rounded-lg shadow-lg"
                 >
                   Notre mission{' '}
-                  <span className="text-subivoir-secondary underline decoration-subivoir-primary decoration-4">
+                  <span className="text-Agrosub-secondary underline decoration-Agrosub-primary decoration-4">
                     institutionnelle
                   </span>
                 </motion.h1>
                 <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8 text-primary-foreground/90">
-                  SubIvoir est l'initiative gouvernementale qui transforme l'accès aux financements agricoles en Côte d'Ivoire.
+                  Agrosub est l'initiative gouvernementale qui transforme l'accès aux financements agricoles en Côte d'Ivoire.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100 px-8 py-6 font-bold">
@@ -106,7 +106,7 @@ const About = () => {
                     asChild
                     size="lg"
                     variant="outline"
-                    className="border-subivoir-primary text-subivoir-primary hover:bg-subivoir-primary/10 px-8 py-6 font-bold"
+                    className="border-Agrosub-primary text-Agrosub-primary hover:bg-Agrosub-primary/10 px-8 py-6 font-bold"
                   >
                     <RouterLink to="/contact">Contact institutionnel</RouterLink>
                   </Button>
@@ -129,7 +129,7 @@ const About = () => {
                     Notre vision <span className="text-primary">stratégique</span>
                   </h2>
                   <p className="text-lg text-muted-foreground mb-6">
-                    SubIvoir s'inscrit dans la politique nationale de développement agricole visant à 
+                    Agrosub s'inscrit dans la politique nationale de développement agricole visant à 
                     moderniser le secteur et améliorer la compétitivité des acteurs à travers un accès 
                     simplifié aux dispositifs de financement.
                   </p>
@@ -355,7 +355,7 @@ const About = () => {
                 
                 <div className="relative z-10 max-w-3xl mx-auto">
                   <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                    Service d'assistance <span className="text-secondary">SubIvoir</span>
+                    Service d'assistance <span className="text-secondary">Agrosub</span>
                   </h2>
                   <p className="text-xl mb-8 text-primary-foreground/90">
                     Notre équipe d'assistance est disponible pour répondre à vos questions 
@@ -377,9 +377,9 @@ const About = () => {
                     size="lg" 
                     variant="outline" 
                     className="
-                      border-subivoir-primary 
-                      text-subivoir-primary 
-                      hover:bg-subivoir-primary/10 
+                      border-Agrosub-primary 
+                      text-Agrosub-primary 
+                      hover:bg-Agrosub-primary/10 
                       px-8 py-6 
                       font-bold
                     "

@@ -132,7 +132,7 @@ const Dashboard = () => {
                 : 'Complétez votre profil investisseur'}
             </h2>
             <p className="text-muted-foreground mt-2">
-              Quelques informations pour démarrer avec SubIvoir
+              Quelques informations pour démarrer avec Agrosub
             </p>
           </div>
           
@@ -163,8 +163,8 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Tableau de bord | SubIvoir</title>
-        <meta name="description" content="Gérez vos projets agricoles, consultez les opportunités recommandées et suivez vos candidatures sur SubIvoir." />
+        <title>Tableau de bord | Agrosub</title>
+        <meta name="description" content="Gérez vos projets agricoles, consultez les opportunités recommandées et suivez vos candidatures sur Agrosub." />
       </Helmet>
       
       <div className="flex min-h-screen bg-gradient-to-b from-background to-muted/20">

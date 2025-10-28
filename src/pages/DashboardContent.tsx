@@ -113,7 +113,7 @@ export default function DashboardContent() {
       setUpcomingDeadlines(sortedByDeadline.slice(0, 3));
 
       const systemPrompt = `
-        Tu es un assistant de recommandations Subivoir.
+        Tu es un assistant de recommandations Agrosub.
         L'utilisateur est de type "${cleanType}".
         Parmi ces descriptions d'opportunités, sélectionne jusqu'à 3 items 
         particulièrement pertinents pour ce type de profil en recherchant

@@ -167,8 +167,8 @@ const OpportunityDetails: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{opp.title} | SubIvoir</title>
-        <meta name="description" content={`Détails de l'opportunité ${opp.title} sur SubIvoir`} />
+        <title>{opp.title} | Agrosub</title>
+        <meta name="description" content={`Détails de l'opportunité ${opp.title} sur Agrosub`} />
       </Helmet>
       <div className="flex flex-col min-h-screen">
         <NavBar />
