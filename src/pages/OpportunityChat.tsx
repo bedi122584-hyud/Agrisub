@@ -6,9 +6,7 @@ import { Loader2, Send, Bot, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { OpenAI } from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // caché dans .env
-});
+
 type Message = {
   role: "user" | "assistant";
   content: string;
@@ -73,12 +71,11 @@ const OpportunityChat: React.FC<OpportunityChatProps> = ({
       context;
 
     try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${openai.apiKey}`,
-        },
+    const res = await fetch("/.netlify/functions/openai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
           temperature: 0.4,

@@ -82,11 +82,9 @@ export default function DashboardContent() {
   const [loadingRecs, setLoadingRecs] = useState(true);
   const [upcomingDeadlines, setUpcomingDeadlines] = useState<Opportunity[]>([]);
 
-  // OpenAI key (À remplacer par un appel backend en production)
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // caché dans .env
-});
 
+
+  
   useEffect(() => {
     async function fetchRecs() {
       if (!profile.profile_completed) {
@@ -127,12 +125,11 @@ const openai = new OpenAI({
       `.trim();
 
       try {
-        const res = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${openai.apiKey}`,
-          },
+      const res = await fetch("/.netlify/functions/openai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
           body: JSON.stringify({
             model: 'gpt-3.5-turbo',
             temperature: 0.3,

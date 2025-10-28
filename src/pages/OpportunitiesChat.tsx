@@ -96,12 +96,11 @@ export default function OpportunitiesChat() {
     setSending(true);
 
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.OPENAI_API_KEY}`,
-        },
+    const response = await fetch("/.netlify/functions/openai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
         body: JSON.stringify({
           model: "gpt-4o",
           temperature: 0.3,
