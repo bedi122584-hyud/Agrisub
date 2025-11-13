@@ -25,7 +25,7 @@ const About = () => {
     {
       name: "BEDI MACOUBI HUGUES VIVIEN",
       role: "Développeur",
-      image: "/team/agro.jpg",
+      image: "/images/bedi.png",
       bio: "Développement Front-end & Back-end du prototype"
     }
   ];
