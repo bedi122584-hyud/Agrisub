@@ -11,28 +11,22 @@ import { motion } from 'framer-motion';
 const About = () => {
   const teamMembers = [
     {
-      name: "Kouadio Amani",
-      role: "Fondateur & Directeur",
+      name: "Blanche Halane",
+      role: "Analyste Data",
       image: "/team/founder.jpg",
-      bio: "Expert en politiques agricoles avec 15 ans d'expérience"
+      bio: "Contribue à la réflexion fonctionnelle, à la structuration des données et au support analytique."
     },
     {
-      name: "Assata Diallo",
-      role: "Responsable des partenariats",
-      image: "/team/partnerships.jpg",
-      bio: "Spécialiste des relations institutionnelles et bailleurs de fonds"
-    },
-    {
-      name: "Edem Mensah",
+      name: "BOLI JONATHAN FOUATY",
       role: "Responsable technique",
       image: "/team/tech.jpg",
-      bio: "Ingénieur en systèmes d'information et gestion de données"
+      bio: "Supervise la coordination organisationnelle des travaux techniques"
     },
     {
-      name: "Marie Koné",
-      role: "Conseillère agronomique",
+      name: "BEDI MACOUBI HUGUES VIVIEN",
+      role: "Développeur",
       image: "/team/agro.jpg",
-      bio: "Experte en développement rural et filières agricoles"
+      bio: "Développement Front-end & Back-end du prototype"
     }
   ];
   
