@@ -68,21 +68,12 @@ const NavBar: React.FC = () => {
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl">
         <div className="flex justify-between items-center h-14 sm:h-16 md:h-[4.5rem]">
           {/* Logo - Responsive */}
-              <Link
-                to="/"
-                onClick={closeAllMenus}
-                className="flex items-center gap-3 flex-shrink-0 z-50"
-              >
-                <div className="w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/30">
-                  <div className="w-3 h-5 sm:w-3.5 sm:h-6 bg-background rounded-full"></div>
-                </div>
-              
-                <span className="text-xl md:text-2xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                  Agrosub
-                </span>
-              </Link>
-
-          
+            <Link to="/" onClick={closeAllMenus} className="flex items-center flex-shrink-0 z-50">
+              <span className="relative inline-flex items-center font-extrabold text-xl sm:text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                Agrosub
+                <span className="absolute -right-3 -top-1 text-[12px] sm:text-[14px] font-bold text-secondary">$</span>
+              </span>
+            </Link>
           {/* Desktop navigation - Hidden on mobile/tablet */}
           <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
             <Link 
