@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 const About = () => {
   const teamMembers = [
     {
-      name: "Blanche Halane",
+      name: "BIO BLANCHE HALANE",
       role: "Analyste Data",
       image: "/team/founder.jpg",
       bio: "Contribue à la réflexion fonctionnelle, à la structuration des données et au support analytique."
