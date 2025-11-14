@@ -25,19 +25,25 @@ const Login = () => {
                 className="bg-gradient-to-b from-background to-muted/10 rounded-2xl shadow-xl border border-border/50 p-8"
               >
                 <div className="text-center mb-8">
-                  <motion.div
-                    initial={{ scale: 0.9 }}
-                    animate={{ scale: 1 }}
-                    className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                  >
-                    <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
-                      <div className="bg-background p-1 rounded-lg">
-                        <div className="w-8 h-8 flex items-center justify-center rounded bg-gradient-to-r from-primary to-secondary">
-                          <span className="text-white font-bold text-xs">SV</span>
+                    <motion.div
+                      initial={{ scale: 0.9 }}
+                      animate={{ scale: 1 }}
+                      className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                    >
+                      <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+                        <div className="bg-background p-1 rounded-lg flex items-center justify-center">
+                          {/* Texte Agrosub avec $ exposant */}
+                          <span className="relative font-extrabold text-sm sm:text-base md:text-lg 
+                                           bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                            Agrosub
+                            <span className="absolute -right-2 -top-1 text-[8px] sm:text-[10px] font-bold text-secondary">
+                              $
+                            </span>
+                          </span>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+
                   <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                     Connexion à Agrosub
                   </h1>
