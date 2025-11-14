@@ -11,6 +11,7 @@ const NavBar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -65,16 +66,41 @@ const NavBar: React.FC = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* 🚧 Bannière déploiement temporaire */}
+      <AnimatePresence>
+        {showBanner && (
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full bg-yellow-100 text-yellow-900 text-center text-xs sm:text-sm font-medium py-1 border-b border-yellow-300 relative"
+          >
+            🚧 Le site AgroSub est actuellement en déploiement temporaire. Certaines parties affichent des valeurs fictives pour démontrer l’implémentation future. Seuls les profils <strong>Investisseur</strong> et <strong>Coopérative</strong> sont disponibles pour l’inscription.
+            <button 
+              onClick={() => setShowBanner(false)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-yellow-800 hover:text-yellow-900 font-bold"
+            >
+              ✕
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl">
         <div className="flex justify-between items-center h-14 sm:h-16 md:h-[4.5rem]">
-          {/* Logo - Responsive */}
-            <Link to="/" onClick={closeAllMenus} className="flex items-center flex-shrink-0 z-50">
-              <span className="relative inline-flex items-center font-extrabold text-xl sm:text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                Agrosub
-                <span className="absolute -right-3 -top-1 text-[12px] sm:text-[14px] font-bold text-secondary">$</span>
+
+          {/* Logo Agrosub + $ */}
+          <Link to="/" onClick={closeAllMenus} className="flex items-center flex-shrink-0 z-50">
+            <span className="relative inline-flex items-center font-extrabold text-xl sm:text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              Agrosub
+              <span className="absolute -right-3 -top-1 text-[12px] sm:text-[14px] font-bold text-secondary">
+                $
               </span>
-            </Link>
-          {/* Desktop navigation - Hidden on mobile/tablet */}
+            </span>
+          </Link>
+
+          {/* Desktop navigation */}
           <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
             <Link 
               to="/" 
@@ -90,7 +116,7 @@ const NavBar: React.FC = () => {
               <Briefcase className="h-4 w-4 mr-1" />
               Financements
             </Link>
-            
+
             <div className="relative">
               <button 
                 className="flex items-center text-sm xl:text-base text-foreground/80 hover:text-primary transition-colors whitespace-nowrap"
@@ -131,7 +157,7 @@ const NavBar: React.FC = () => {
                 )}
               </AnimatePresence>
             </div>
-            
+
             <Link 
               to="/a-propos" 
               className="text-sm xl:text-base text-foreground/80 hover:text-primary transition-colors flex items-center whitespace-nowrap"
@@ -139,7 +165,7 @@ const NavBar: React.FC = () => {
               <BookOpen className="h-4 w-4 mr-1" />
               À propos
             </Link>
-            
+
             {user ? (
               <div className="flex items-center space-x-2 xl:space-x-3">
                 <Link 
@@ -185,8 +211,8 @@ const NavBar: React.FC = () => {
               </div>
             )}
           </div>
-          
-          {/* Tablet/Mobile: Auth buttons + Menu */}
+
+          {/* Mobile/Tablet Menu */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
             {user ? (
               <Link 
@@ -211,7 +237,7 @@ const NavBar: React.FC = () => {
                 </Button>
               </Link>
             )}
-            
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-foreground/80 hover:text-primary transition-colors p-1 touch-manipulation"
