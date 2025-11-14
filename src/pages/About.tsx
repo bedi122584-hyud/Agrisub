@@ -11,6 +11,18 @@ import { motion } from 'framer-motion';
 const About = () => {
   const teamMembers = [
     {
+      name: "YVES SOSTHÈNE KOUAME",
+      role: "Porteur de projet",
+      image: "/team/founder.jpg",
+      bio: "Assure la définition des objectifs, l'impulsion stratégique et la coordination générale avec les partenaires."
+    },
+    {
+      name: "BIO EUPHRAHIM YAI",
+      role: "Responsable Stratégie et Développement",
+      image: "/team/founder.jpg",
+      bio: "Contribue à orienter la solution vers les besoins réels des acteurs du secteur agricole."
+    },
+    {
       name: "BIO BLANCHE HALANE",
       role: "Analyste Data",
       image: "/team/founder.jpg",
