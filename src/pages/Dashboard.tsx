@@ -66,44 +66,45 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="relative w-24 h-24 mb-6"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-2xl p-1.5 rotate-45">
-            <div className="w-full h-full bg-background rounded-xl flex items-center justify-center">
-              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary -rotate-45">
-                SV
-              </span>
-            </div>
-          </div>
-        </motion.div>
+if (loading) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+      
+      {/* Logo Agrosub avec pulse */}
+      <motion.div
+        className="w-24 h-24 mb-6 flex items-center justify-center"
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <span className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          Agrosub
+        </span>
+      </motion.div>
 
-        <motion.p
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
-        >
-          Chargement de votre espace
-        </motion.p>
-        
-        <motion.p
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-2 text-muted-foreground"
-        >
-          Valorisation de l'agriculture ivoirienne 🌱
-        </motion.p>
-      </div>
-    );
-  }
+      {/* Texte principal */}
+      <motion.p
+        initial={{ y: 5, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.3 }}
+        className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
+      >
+        Chargement de votre espace
+      </motion.p>
+
+      {/* Texte secondaire */}
+      <motion.p
+        initial={{ y: 5, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
+        className="mt-2 text-muted-foreground"
+      >
+        Valorisation de l'agriculture ivoirienne
+      </motion.p>
+
+    </div>
+  );
+}
+
 
   if (!user || !profile) return null;
 
