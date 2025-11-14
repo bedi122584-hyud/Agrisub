@@ -250,28 +250,36 @@ const DashboardSidebar: React.FC = () => {
     <aside className="w-64 bg-background border-r border-border h-screen sticky top-0 overflow-y-auto">
       <div className="px-4 py-6">
         {/* Logo Agrosub */}
-        <motion.div 
-          className="flex items-center mb-8"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl shadow-lg">
-            <div className="bg-background p-1 rounded-lg">
-              <div className="w-8 h-8 flex items-center justify-center rounded bg-gradient-to-r from-primary to-secondary">
-                <span className="text-white font-bold text-xs">SV</span>
-              </div>
-            </div>
-          </div>
-          <motion.span 
-            className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
+          <motion.div
+            className="flex items-center mb-8"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            Agrosub
-          </motion.span>
-        </motion.div>
+            {/* Icône / badge à gauche */}
+            <div className="relative">
+              <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-primary to-secondary shadow-lg">
+                <div className="bg-background p-1 rounded-md w-full h-full flex items-center justify-center">
+                  {/* Ici tu peux mettre une icône ou laisser vide */}
+                </div>
+              </div>
+          
+              {/* Petit $ en exposant */}
+              <span className="absolute -top-2 -right-2 text-[12px] sm:text-sm font-bold text-secondary">
+                $
+              </span>
+            </div>
+          
+            {/* Texte Agrosub */}
+            <motion.span
+              className="ml-3 text-xl sm:text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              Agrosub
+            </motion.span>
+          </motion.div>
 
         {/* Profil utilisateur */}
         {profile && (
