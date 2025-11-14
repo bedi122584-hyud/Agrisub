@@ -60,7 +60,7 @@ const Opportunities = () => {
       deadline: format(deadlineDate, 'dd MMMM yyyy', { locale: fr }),
       daysLeft: Math.max(0, Math.ceil((deadlineDate.getTime() - Date.now()) / (1000 * 3600 * 24))),
       totalDays: Math.ceil((deadlineDate.getTime() - createdDate.getTime()) / (1000 * 3600 * 24)),
-      logoUrl: o.logo_url || '/images/demo-cover-.png'
+      logoUrl: o.logo_url || '/images/demo-cover.jpg'
     };
   };
 
