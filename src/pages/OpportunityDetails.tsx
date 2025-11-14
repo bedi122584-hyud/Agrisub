@@ -141,15 +141,46 @@ const OpportunityDetails: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
-        <main className="flex-1 container max-w-6xl py-12 text-center">
-          <p className="text-destructive text-lg mb-4">{error || 'Opportunité non trouvée'}</p>
-          <Button 
+if (error || !opp || !profileData) {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <NavBar />
+      <main className="flex-1 container max-w-3xl py-16 mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-background/50 p-12 rounded-2xl border border-border/30 shadow-lg"
+        >
+          <div className="mb-6">
+            <span className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              ⚠️
+            </span>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            {!profileData ? 'Connexion requise' : 'Opportunité non trouvée'}
+          </h1>
+
+          <p className="text-muted-foreground mb-8 text-lg">
+            {!profileData
+              ? "Veuillez vous connecter pour accéder à cette opportunité."
+              : "L'opportunité que vous recherchez n'existe pas ou a été supprimée."}
+          </p>
+
+          <Button
             onClick={() => navigate(-1)}
-            className="bg-gradient-to-r from-primary to-primary-dark text-white"
+            className="px-8 py-4 text-base font-medium rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-md hover:scale-105 transition-transform"
           >
-            ← Retour aux opportunités
+            ← Retour
           </Button>
-        </main>
+        </motion.div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
         <Footer />
       </div>
     );
@@ -190,7 +221,7 @@ const OpportunityDetails: React.FC = () => {
           <div className="relative h-48 sm:h-56 md:h-64 lg:h-72 bg-background">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 z-10" />
             <img
-              src={opp.cover_image || '/images/demo-cover.png'}
+              src={opp.cover_image || '/images/demo-cover.jpg'}
               alt={opp.title}
               className="w-full h-full object-contain"
               loading="lazy"
