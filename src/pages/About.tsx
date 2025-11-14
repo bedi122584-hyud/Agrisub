@@ -31,7 +31,7 @@ const About = () => {
     {
       name: "BOLI JONATHAN FOUATY",
       role: "Responsable technique",
-      image: "/team/tech.jpg",
+      image: "/images/Timo.png",
       bio: "Supervise la coordination organisationnelle des travaux techniques"
     },
     {
